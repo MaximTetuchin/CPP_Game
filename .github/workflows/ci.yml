@@ -3,23 +3,27 @@ name: C++ SFML Platformer CI
 on:
   push:
     branches:
-      - main  
+      - main
   pull_request:
     branches:
-      - main 
+      - main
 
 jobs:
   build:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install SFML dependencies
+    - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y libsfml-dev
+        sudo apt install -y libsfml-dev libgtest-dev cmake
+        cd /usr/src/gtest
+        sudo cmake .
+        sudo make
+        sudo cp lib/*.a /usr/lib
 
     - name: Build the project
       run: |
