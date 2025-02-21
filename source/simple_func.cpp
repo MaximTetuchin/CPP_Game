@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+CPP_Game
+*/
 #include "simple_func.h"
 
 CircleShape createCircle(float radius, Vector2f position, Color fillColor) {

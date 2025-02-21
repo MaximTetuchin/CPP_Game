@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+CPP_Game
+*/
 #include <gtest/gtest.h>
 #include "../source/simple_func.h"
 

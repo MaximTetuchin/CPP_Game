@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+CPP_Game
+*/
 #ifndef SIMPLE_FUNCTION
 #define SIMPLE_FUNCTION
 
