@@ -4,7 +4,7 @@ CPP_Game
 #include "simple_func.h"
 
 int main() {
-    RenderWindow window(VideoMode(400, 400), L"Новый проект");
+    RenderWindow window(VideoMode(800, 800), L"Placeholder");
     window.setVerticalSyncEnabled(true);
     
     CircleShape shape = createCircle(100.f, {100, 100}, Color::Green);
