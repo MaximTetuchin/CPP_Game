@@ -7,11 +7,11 @@ const int W = 40;
 
 String TileMap[H] = {
 
-"B                                       ",
+"                                        ",
 "B                                B     B",
 "B                                B     B",
-"B                                B     B",
-"B                                B     B",
+"B                                      B",
+"B                                      B",
 "B         0000                BBBB     B",
 "B                                B     B",
 "BBB                              B     B",
@@ -22,73 +22,93 @@ String TileMap[H] = {
 
 }; 
 
-class PLAYER {
 
+
+class Entity {
 	public:
-		float dx,dy;
-		FloatRect rect;
-		bool onGround;
 		Sprite sprite;
-		float currentFrame;
-
-	public:
-		PLAYER(Texture &image)
-	{
-		sprite.setTexture(image);
-		rect = FloatRect(7*32,9*32,40,50);
-		dx=dy=0.1;
-		currentFrame = 0;
-	}
-
-
-	void update(float time)
-	{	
-
-		rect.left += dx * time;	
-		Collision(0);
-
-		if (!onGround) dy=dy+0.0005*time;
-		rect.top += dy*time;
-		onGround=false;
-		Collision(1);
+		FloatRect rect;
+		float dx, dy;
+		bool isAlive;
 	
+		Entity(Texture &image, float x, float y, float w, float h) {
+			sprite.setTexture(image);
+			rect = FloatRect(x, y, w, h);
+			dx = dy = 0;
+			isAlive = true;
+		}
+	
+		virtual void update(float time) = 0;
+	
+		void draw(RenderWindow &window) {
+			sprite.setPosition(rect.left, rect.top);
+			window.draw(sprite);
+		}
+	};
+	
+
+
+
+	class Player : public Entity {
+		public:
+			bool onGround;
+			float currentFrame;
+			float idleFrame;
 		
-		currentFrame += 0.005*time;
-		if (currentFrame > 6) currentFrame -=6 ;
-
-		if (dx>0) sprite.setTextureRect(IntRect(40*int(currentFrame),244,40,50));
-		if (dx<0) sprite.setTextureRect(IntRect(40*int(currentFrame)+40,244,-40,50));
-		
-
-		sprite.setPosition(rect.left, rect.top);
-
-		dx=0;
-	}
-
-
-
-	void Collision(int dir)
-	{
-		for (int i = rect.top/32 ; i<(rect.top+rect.height)/32; i++)
-		for (int j = rect.left/32; j<(rect.left+rect.width)/32; j++)
-			{ 
-			if (TileMap[i][j]=='B') 
-			{ 
-				if ((dx>0) && (dir==0)) rect.left =  j*32 -  rect.width; 
-				if ((dx<0) && (dir==0)) rect.left =  j*32 + 32;
-				if ((dy>0) && (dir==1))  { rect.top =   i*32 -  rect.height;  dy=0;   onGround=true; }
-				if ((dy<0) && (dir==1))  { rect.top = i*32 + 32;   dy=0;}
+			Player(Texture &image) : Entity(image, 7 * 32, 9 * 32, 40, 50) {
+				onGround = false;
+				currentFrame = 0;
 			}
+		
+			void update(float time) override {
+				rect.left += dx * time;
+				Collision(0);
 			
-			if (TileMap[i][j]=='0') 
-							{ 
-								TileMap[i][j]=' ';
-							}
-					
+				if (!onGround) dy += 0.0005 * time;
+				rect.top += dy * time;
+				onGround = false;
+				Collision(1);
+			
+				currentFrame += 0.005 * time;
+				idleFrame = currentFrame/1.5;
+				if (currentFrame > 6) currentFrame -= 6;
+				if (idleFrame > 3) idleFrame -= 3; 
+
+				if (dx > 0) {
+					sprite.setTextureRect(IntRect(40 * int(currentFrame), 244, 40, 50));
+				}
+
+				if (dx < 0) {
+					sprite.setTextureRect(IntRect(40 * int(currentFrame) + 40, 244, -40, 50));
+				}
+				
+
+				if (dx == 0) {
+					sprite.setTextureRect(IntRect(43 * int(idleFrame)+4, 188, 40, 50));
+				}
+			
+				sprite.setPosition(rect.left, rect.top);
+			
+				dx = 0;
 			}
-	
-	}
-};
+					
+		
+		
+			void Collision(int dir) {
+				for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
+					for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++) {
+						if (TileMap[i][j] == 'B') {
+							if ((dx > 0) && (dir == 0)) rect.left = j * 32 - rect.width;
+							if ((dx < 0) && (dir == 0)) rect.left = j * 32 + 32;
+							if ((dy > 0) && (dir == 1)) { rect.top = i * 32 - rect.height; dy = 0; onGround = true; }
+							if ((dy < 0) && (dir == 1)) { rect.top = i * 32 + 32; dy = 0; }
+						}
+						if (TileMap[i][j] == '0'){
+							TileMap[i][j] = ' ';
+						}
+					}
+			}
+		};		
 
 int main()
 {   
@@ -107,7 +127,7 @@ int main()
 	Clock clock;
 	float currentFrame=0;
 
-    PLAYER p(t); //! player init.
+    Player p(t); //! player init.
 	RectangleShape rectangle(Vector2f(32,32)); //! tile init.
 
 	//! window cycle
