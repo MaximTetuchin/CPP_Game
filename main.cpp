@@ -6,7 +6,6 @@ const int H = 12;
 const int W = 40;
 
 String TileMap[H] = {
-
 "                                        ",
 "B                                      B",
 "B                                B     B",
@@ -19,11 +18,10 @@ String TileMap[H] = {
 "B              BB                      B",
 "B    B         BB         BB           B",
 "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
-
 }; 
 
-
-
+/*-----------------------------------Alive entity logic------------------------------------*/
+//! Entity class
 class Entity {
 	public:
 		Sprite sprite;
@@ -45,8 +43,8 @@ class Entity {
 			window.draw(sprite);
 		}
 };
-	
 
+//! Player class
 class Player : public Entity {
 	public:
 		bool onGround;
@@ -56,7 +54,6 @@ class Player : public Entity {
 		bool lastAction; //! i enter this field to understand at which direction player is currently looking.
 		//! 1 - forward, 0 - backward	
 
-	
 		Player(Texture &image) : Entity(image, 7 * 32, 9 * 32, 40, 50) {
 			onGround = false;
 			currentFrame = 0;
@@ -91,12 +88,9 @@ class Player : public Entity {
 			}
 		
 			sprite.setPosition(rect.left, rect.top);
-		
 			dx = 0;
 		}
 				
-	
-	
 		void Collision(int dir) {
 			for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
 				for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++) {
@@ -111,7 +105,66 @@ class Player : public Entity {
 					}
 				}
 		}
-	};		
+};		
+
+/*----------------------------------------Guns logic---------------------------------------*/
+class Bullet : public Entity {
+	public:
+		float speed;
+		int damage;
+	
+		Bullet(Texture &image, float x, float y, bool lastAction, float spd, int dmg) 
+			: Entity(image, x, y, 10, 10) {
+			int direction = lastAction ? 1 : -1; // Направление в зависимости от того, куда смотрит игрок
+			speed = spd * direction; 
+			damage = dmg;  // Урон пули, передаваемый при создании
+		}
+	
+		void update(float time) override {
+			rect.left += speed * time;
+			if (rect.left < 0 || rect.left > 800) {
+				isAlive = false; // Пуля исчезает, если выходит за экран
+			}
+			sprite.setPosition(rect.left, rect.top);
+		}
+};
+	
+class Weapon {
+public:
+	float fireRate; 
+	Texture bulletTexture1, bulletTexture2;
+	bool hasTwoBulletTypes;
+	int shotCount;
+	
+	//! one-type bullet weapon
+	Weapon(float rate, const String &bulletTex) 
+		: fireRate(rate), hasTwoBulletTypes(false), shotCount(0) {
+		bulletTexture1.loadFromFile(bulletTex);
+	}
+
+	//! two-type bullet weapon
+	Weapon(float rate, const String &bulletTex1, const String &bulletTex2) 
+		: fireRate(rate), hasTwoBulletTypes(true), shotCount(0) {
+		bulletTexture1.loadFromFile(bulletTex1);
+		bulletTexture2.loadFromFile(bulletTex2);
+	}
+
+	//! shoot method
+	void shoot(std::vector<Entity*> &entities, float x, float y, bool lastAction) {
+		Texture &selectedTexture = bulletTexture1; 
+		float bulletSpeed = 0.3;
+		int bulletDamage = 10;
+
+		//! in case if fire bullet
+		if (hasTwoBulletTypes && (shotCount % 5 == 1)) {
+			selectedTexture = bulletTexture2;
+			bulletSpeed = 0.4;
+			bulletDamage = 15; 
+		}
+		entities.push_back(new Bullet(selectedTexture, x, y, lastAction, bulletSpeed, bulletDamage));
+		shotCount++;
+	}
+};	
 
 int main()
 {   
