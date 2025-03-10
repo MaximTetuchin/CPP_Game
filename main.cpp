@@ -17,7 +17,7 @@ String TileMap[H] = {
     "BBB                              B     B",
     "B              BB                BB    B",
     "B              BB                      B",
-    "B    B         BB         BB      E    B", // Enemy at position (32, 10)
+    "B    B         BB         BB      E    B", 
     "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
 };
 
@@ -28,7 +28,7 @@ public:
     float dx, dy;
     bool isAlive;
 
-    Entity(Texture &image, float x, float y, float w, float h) 
+    Entity(Texture &image, float x, float y, float w, float h)
         : rect(x, y, w, h), dx(0), dy(0), isAlive(true) {
         sprite.setTexture(image);
     }
@@ -42,36 +42,49 @@ public:
 };
 
 class Bullet : public Entity {
-public:
-    float speed;
-    bool direction;
-    int damage;
+    public:
+        float speed;
+        bool direction;
+        int damage;
 
-    Bullet(Texture &image, float x, float y, bool dir, float spd, int dmg)
-        : Entity(image, x, y, 10, 10), direction(dir), speed(spd), damage(dmg) {}
+        Bullet(Texture &image, float x, float y, bool dir, float spd, int dmg)
+            : Entity(image, x, y, 8, 8), direction(dir), speed(spd), damage(dmg) {
+            sprite.setTextureRect(IntRect(247, 583, 8, 8));
+        }
 
-    void update(float time) override {
-        rect.left += speed * time * (direction ? 1 : -1);
-        if (rect.left < 0 || rect.left > W*32) isAlive = false;
-    }
+        void update(float time) override {
+            rect.left += speed * time * (direction ? 1 : -1);
+        
+            int i = rect.top / 32;
+            int j = rect.left / 32;
+        
+            if (TileMap[i][j] == 'B') {
+                isAlive = false;
+            }
+        
+            if (rect.left < 0 || rect.left > W * 32) isAlive = false;
+    }        
 };
+
 
 class Weapon {
     Texture bulletTexture;
     float fireDelay;
     float currentDelay;
     
-	public:
-    Weapon(const String &texturePath, float delay) 
-        : fireDelay(delay), currentDelay(0) {
-        bulletTexture.loadFromFile(texturePath);
+public:
+    Weapon(float delay) 
+        : fireDelay(delay), currentDelay(0) {}
+
+    void setBulletTexture(Texture &texture) {
+        bulletTexture = texture;
     }
 
     bool tryFire(std::vector<Bullet*> &bullets, float x, float y, bool direction) {
         if(currentDelay <= 0) {
             bullets.push_back(new Bullet(bulletTexture,
                 x + (direction ? 40 : -10), 
-                y + 15, direction, 
+                y + 10, direction, 
                 0.5f, 
                 25));
             currentDelay = fireDelay;
@@ -93,9 +106,9 @@ public:
     bool lastAction;
     Weapon weapon;
 
-    Player(Texture &image) 
+    Player(Texture &image, Weapon &weapon)
         : Entity(image, 7*32, 9*32, 40, 50),
-          weapon("assets/bullet.png", 200.0f),
+          weapon(weapon),
           onGround(false),
           currentFrame(0),
           lastAction(true) {}
@@ -110,24 +123,24 @@ public:
         Collision(1);
 
         currentFrame += 0.005 * time;
-        idleFrame = currentFrame/1.5;
+        idleFrame = currentFrame / 1.5;
 
         if(currentFrame > 6) currentFrame -= 6;
         if(idleFrame > 3) idleFrame -= 3;
 
         if(dx > 0) {
-            sprite.setTextureRect(IntRect(40*int(currentFrame), 244, 40, 50));
+            sprite.setTextureRect(IntRect(40 * int(currentFrame), 244, 40, 50));
             lastAction = true;
         } 
         else if(dx < 0) {
-            sprite.setTextureRect(IntRect(40*int(currentFrame)+40, 244, -40, 50));
+            sprite.setTextureRect(IntRect(40 * int(currentFrame) + 40, 244, -40, 50));
             lastAction = false;
         } 
         else {
             if(lastAction) {
-                sprite.setTextureRect(IntRect(43*int(idleFrame)+4, 188, 40, 50));
+                sprite.setTextureRect(IntRect(43 * int(idleFrame) + 4, 188, 40, 50));
             } else {
-                sprite.setTextureRect(IntRect(43*int(idleFrame)+4 + 40, 188, -40, 50));
+                sprite.setTextureRect(IntRect(43 * int(idleFrame) + 4 + 40, 188, -40, 50));
             }
         }
 
@@ -140,18 +153,18 @@ public:
     }
 
     void Collision(int dir) {
-        for (int i = rect.top/32; i < (rect.top + rect.height)/32; i++)
-            for (int j = rect.left/32; j < (rect.left + rect.width)/32; j++) {
+        for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
+            for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++) {
                 if (TileMap[i][j] == 'B') {
-                    if ((dx > 0) && (dir == 0)) rect.left = j*32 - rect.width;
-                    if ((dx < 0) && (dir == 0)) rect.left = j*32 + 32;
+                    if ((dx > 0) && (dir == 0)) rect.left = j * 32 - rect.width;
+                    if ((dx < 0) && (dir == 0)) rect.left = j * 32 + 32;
                     if ((dy > 0) && (dir == 1)) { 
-                        rect.top = i*32 - rect.height; 
+                        rect.top = i * 32 - rect.height; 
                         dy = 0; 
                         onGround = true; 
                     }
                     if ((dy < 0) && (dir == 1)) { 
-                        rect.top = i*32 + 32; 
+                        rect.top = i * 32 + 32; 
                         dy = 0; 
                     }
                 }
@@ -166,11 +179,11 @@ public:
     bool onGround;
     int health;
     float speed;
-    float moveRange; // Range within which the enemy moves
-    float startX;    // Starting X position
+    float moveRange; 
+    float startX;
 
     Enemy(Texture &image, float x, float y, float w, float h, int armor, float speed, float range)
-        : Entity(image, x, y, w, h), armor(armor), health(100), speed(speed), moveRange(range), startX(x),onGround(false) {}
+        : Entity(image, x, y, w, h), armor(armor), health(100), speed(speed), moveRange(range), startX(x), onGround(false) {}
 
     void takeDamage(int damage) {
         health -= (damage - armor);
@@ -178,34 +191,34 @@ public:
     }
 
     void update(float time) override {
-        // Move back and forth within the range
-        if (rect.left < startX - moveRange || rect.left > startX + moveRange) {
-            speed = -speed; // Reverse direction
+        float nextX = rect.left + speed * time;
+    
+        if (nextX < startX - moveRange || nextX > startX + moveRange) {
+            speed = -speed;
+            nextX = rect.left + speed * time; 
         }
-        rect.left += speed * time;
 
-        // Handle collisions
+        rect.left = nextX;
         Collision(0);
-
-        if(!onGround) dy += 0.0005 * time;
+    
+        if (!onGround) dy += 0.0005 * time;
         rect.top += dy * time;
         onGround = false;
         Collision(1);
     }
-
-    void Collision(int dir) {
-        for (int i = rect.top/32; i < (rect.top + rect.height)/32; i++)
-            for (int j = rect.left/32; j < (rect.left + rect.width)/32; j++) {
+    virtual void Collision(int dir) {
+        for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
+            for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++) {
                 if (TileMap[i][j] == 'B') {
-                    if ((speed > 0) && (dir == 0)) rect.left = j*32 - rect.width;
-                    if ((speed < 0) && (dir == 0)) rect.left = j*32 + 32;
+                    if ((speed > 0) && (dir == 0)) rect.left = j * 32 - rect.width;
+                    if ((speed < 0) && (dir == 0)) rect.left = j * 32 + 32;
                     if ((dy > 0) && (dir == 1)) { 
-                        rect.top = i*32 - rect.height; 
+                        rect.top = i * 32 - rect.height; 
                         dy = 0; 
                         onGround = true; 
                     }
                     if ((dy < 0) && (dir == 1)) { 
-                        rect.top = i*32 + 32; 
+                        rect.top = i * 32 + 32; 
                         dy = 0; 
                     }
                 }
@@ -213,6 +226,39 @@ public:
     }
 };
 
+class FlyingEnemy : public Enemy {
+    public:
+        FlyingEnemy(Texture &image, float x, float y, float w, float h, int armor, float speed, float range)
+            : Enemy(image, x, y, w, h, armor, speed, range) {
+            sprite.setTextureRect(IntRect(247, 583, 8, 8)); // Adjust as needed
+        }
+    
+        void update(float time) override {
+            float nextX = rect.left + speed * time;
+    
+            if (nextX < startX - moveRange || nextX > startX + moveRange) {
+                speed = -speed;
+                nextX = rect.left + speed * time;
+            }
+    
+            rect.left = nextX;
+            Collision(0);
+        }
+    
+        void Collision(int dir) override {
+            if (dir == 0) {
+                for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++) {
+                    for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++) {
+                        if (TileMap[i][j] == 'B') {
+                            if (speed > 0) rect.left = j * 32 - rect.width;
+                            else if (speed < 0) rect.left = j * 32 + 32;
+                        }
+                    }
+                }
+            }
+        }
+    };
+    
 int main() {
     RenderWindow window(VideoMode(800, 600), "Dakaraima!", Style::Titlebar | Style::Close);
     window.setSize(Vector2u(800, 600));
@@ -226,23 +272,29 @@ int main() {
     playerTex.loadFromFile("assets/fang.png");
 
     Texture enemyTex;
-    enemyTex.loadFromFile("assets/enemy.png");
+    enemyTex.loadFromFile("assets/foes.png");
 
-    Player player(playerTex);
+    Texture bulletTex;
+    bulletTex.loadFromFile("assets/fang.png");
+
+    Weapon weapon(200.0f);
+    weapon.setBulletTexture(bulletTex);
+
+    Player player(playerTex, weapon);
+
     std::vector<Bullet*> bullets;
     std::vector<Enemy*> enemies;
 
-    // Parse TileMap for enemies
     for (int i = 0; i < H; i++) {
         for (int j = 0; j < W; j++) {
             if (TileMap[i][j] == 'E') {
-                enemies.push_back(new Enemy(enemyTex, j * 32, i * 32, 40, 50, 5, 0.05f, 100.0f)); // Armor = 5, Speed = 0.05, Range = 100
+                enemies.push_back(new Enemy(enemyTex, j * 32, i * 32, 40, 50, 5, 0.05f, 100.0f));
                 TileMap[i][j] = ' '; // Remove 'E' from the map after creating the enemy
             }
         }
     }
 
-    RectangleShape rectangle(Vector2f(32,32));
+    RectangleShape rectangle(Vector2f(32, 32));
     Clock clock;
 
     while (window.isOpen()) {
@@ -302,8 +354,8 @@ int main() {
             }
         }
 
-        camera.setCenter(player.rect.left + player.rect.width/2, 
-                        player.rect.top + player.rect.height/2 - 70);
+        camera.setCenter(player.rect.left + player.rect.width / 2, 
+                        player.rect.top + player.rect.height / 2 - 70);
         window.setView(camera);
         window.clear(Color::White);
 
@@ -312,7 +364,6 @@ int main() {
                 if(TileMap[i][j] == 'B') rectangle.setFillColor(Color::Black);
                 if(TileMap[i][j] == '0') rectangle.setFillColor(Color::Green);
                 if(TileMap[i][j] == ' ') continue;
-
                 rectangle.setPosition(j*32, i*32);
                 window.draw(rectangle);
             }
@@ -324,7 +375,6 @@ int main() {
 
         player.draw(window);
 
-        // Draw enemies
         for (auto& enemy : enemies) {
             if (enemy->isAlive) enemy->draw(window);
         }
