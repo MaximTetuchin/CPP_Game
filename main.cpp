@@ -18,7 +18,7 @@ String TileMap[H] = {
     "BBB                              B          B",
     "B              BB                BB         B",
     "B              BB         J                 B",
-    "B    B         BB         BB                B", 
+    "B    B         BB         BB           D    B", 
     "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
 };
 
@@ -211,7 +211,7 @@ public:
 
     WalkingEnemy(Texture &image, float x, float y, float w, float h, int armor, float speed, float range)
         : Enemy(image, x, y, w, h, 0, speed, range), onGround(false) {
-            sprite.setTextureRect(IntRect(0, 0, 150, 150)); //todo redo the texture
+            sprite.setTextureRect(IntRect(0, 0, 34, 45));
         }
 
     void update(float time) override {
@@ -318,7 +318,7 @@ class ArmoredWalkingEnemy : public WalkingEnemy {
     public:
         ArmoredWalkingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range)
             : WalkingEnemy(image, x, y, w, h, 10, speed, range) {
-            sprite.setTextureRect(IntRect(150, 0, 150, 150)); //todo redo the texture
+            sprite.setTextureRect(IntRect(0, 0, 34, 45));
         }
 };
     
@@ -353,6 +353,11 @@ int main() {
     enemyTex.loadFromFile("assets/foes.png");
     fTex.loadFromFile("assets/fang.png");
     bulletTex.loadFromFile("assets/fang.png");
+    
+    //! ----------------------- walking enemy ----------------------------
+    Texture WalkingEnemyTex,ArmoredWalkingEnemyTex;
+    WalkingEnemyTex.loadFromFile("assets/edited_assets/walkingEnemy.png");
+    ArmoredWalkingEnemyTex.loadFromFile("assets/edited_assets/armoredWalkingEnemy.png");
 
     Weapon weapon(200.0f);
     weapon.setBulletTexture(bulletTex);
@@ -366,7 +371,7 @@ int main() {
         for (int j = 0; j < W; j++) {
             //^ Defaulf enemies 
             if (TileMap[i][j] == 'E') {
-                entities.push_back(new WalkingEnemy(enemyTex, j*32, i*32, 40, 50, 5, 0.05f, 100.0f));
+                entities.push_back(new WalkingEnemy(WalkingEnemyTex, j*32, i*32, 34, 45, 5, 0.05f, 100.0f));
                 TileMap[i][j] = ' ';
             }
             if (TileMap[i][j] == 'F') {
@@ -379,7 +384,7 @@ int main() {
             }     
             //^ Armored enemies 
             if (TileMap[i][j] == 'D') {
-                entities.push_back(new ArmoredWalkingEnemy(enemyTex, j*32, i*32, 40, 50, 0.05f, 100.0f));
+                entities.push_back(new ArmoredWalkingEnemy(ArmoredWalkingEnemyTex, j*32, i*32, 34, 45, 0.05f, 100.0f));
                 TileMap[i][j] = ' ';
             }
             if (TileMap[i][j] == 'V') {
