@@ -4,23 +4,25 @@
 using namespace sf;
 
 const int H = 12;
-const int W = 40;
+const int W = 45;
 
+//! My idea is to create a game engine.
 String TileMap[H] = {
-    "                                        ",
-    "B                                      B",
-    "B                                B     B",
-    "B                 F                    B",
-    "B                           E          B",
-    "B         0000         BBBBBBBBBBB     B",
-    "B                                B     B",
-    "BBB                              B     B",
-    "B              BB                BB    B",
-    "B              BB         J            B",
-    "B    B         BB         BB           B", 
-    "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+    "                                             ",
+    "B                                           B",
+    "B                                B          B",
+    "B                 F                         B",
+    "B                           E               B",
+    "B         0000         BBBBBBBBBBB          B",
+    "B                                B          B",
+    "BBB                              B          B",
+    "B              BB                BB         B",
+    "B              BB         J                 B",
+    "B    B         BB         BB                B", 
+    "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
 };
 
+//! Main class
 class Entity {
 public:
     Sprite sprite;
@@ -41,6 +43,7 @@ public:
     }
 };
 
+//! --------------------------------------------- Weapons ---------------------------------------------
 class Bullet : public Entity {
     public:
         float speed;
@@ -96,7 +99,7 @@ class Weapon {
 
         void update(float time) {
             if(currentDelay > 0) currentDelay -= time;
-        }
+    }
 };
 
 class Player : public Entity {
@@ -179,7 +182,7 @@ public:
         }
     }
 };
-
+//! Basic enemy class
 class Enemy : public Entity {
     public:
         int armor;
@@ -201,14 +204,14 @@ class Enemy : public Entity {
         virtual void update(float time) = 0;
         virtual void Collision(int dir) = 0;
 };
-    
+//! --------------------------------------------- Main enemy types ---------------------------------------------
 class WalkingEnemy : public Enemy {
 public:
     bool onGround;
 
     WalkingEnemy(Texture &image, float x, float y, float w, float h, int armor, float speed, float range)
-        : Enemy(image, x, y, w, h, armor, speed, range), onGround(false) {
-            sprite.setTextureRect(IntRect(0, 0, 150, 150));
+        : Enemy(image, x, y, w, h, 0, speed, range), onGround(false) {
+            sprite.setTextureRect(IntRect(0, 0, 150, 150)); //todo redo the texture
         }
 
     void update(float time) override {
@@ -256,11 +259,11 @@ class JumpingEnemy : public WalkingEnemy {
     public:
         JumpingEnemy(Texture &image, float x, float y, float w, float h, 
                     int armor, float speed, float range, float jumpForce = 0.35f)
-            : WalkingEnemy(image, x, y, w, h, armor, speed, 200),
+            : WalkingEnemy(image, x, y, w, h, 0, speed, 200),
               jumpForce(jumpForce) {
             jumpInterval = rand() % 3000 + 2000;
             jumpTimer = jumpInterval;
-            sprite.setTextureRect(IntRect(0, 0, 200, 300)); 
+            sprite.setTextureRect(IntRect(0, 0, 200, 300));  //todo redo the texture
         }
     
         void update(float time) override {
@@ -280,8 +283,8 @@ class JumpingEnemy : public WalkingEnemy {
 class FlyingEnemy : public Enemy {
 public:
     FlyingEnemy(Texture &image, float x, float y, float w, float h, int armor, float speed, float range)
-        : Enemy(image, x, y, w, h, armor, speed, range) {
-        sprite.setTextureRect(IntRect(247, 583, 8, 8));
+        : Enemy(image, x, y, w, h, 0, speed, range) {
+        sprite.setTextureRect(IntRect(247, 583, 8, 8)); //todo redo the texture
     }
 
     void update(float time) override {
@@ -309,7 +312,33 @@ public:
         }
     }
 };
+
+//! --------------------------------------------- Armored Enemy Types ---------------------------------------------
+class ArmoredWalkingEnemy : public WalkingEnemy {
+    public:
+        ArmoredWalkingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range)
+            : WalkingEnemy(image, x, y, w, h, 10, speed, range) {
+            sprite.setTextureRect(IntRect(150, 0, 150, 150)); //todo redo the texture
+        }
+};
     
+class ArmoredJumpingEnemy : public JumpingEnemy {
+public:
+    ArmoredJumpingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range, float jumpForce = 0.35f)
+        : JumpingEnemy(image, x, y, w, h, 10, speed, range, jumpForce) {
+        sprite.setTextureRect(IntRect(200, 0, 200, 300)); //todo redo the texture
+    }
+};
+
+class ArmoredFlyingEnemy : public FlyingEnemy {
+public:
+    ArmoredFlyingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range)
+        : FlyingEnemy(image, x, y, w, h, 10, speed, range) {
+        sprite.setTextureRect(IntRect(300, 0, 40, 50)); //todo redo the texture
+    }
+};
+
+//! --------------------------------------------- Main function ---------------------------------------------
 int main() {
     RenderWindow window(VideoMode(800, 600), "Dakaraima!", Style::Titlebar | Style::Close);
     window.setSize(Vector2u(800, 600));
@@ -335,6 +364,7 @@ int main() {
     //! Enemies spawn, after spawning an enemy, game creates an empty space in spawn. point
     for (int i = 0; i < H; i++) {
         for (int j = 0; j < W; j++) {
+            //^ Defaulf enemies 
             if (TileMap[i][j] == 'E') {
                 entities.push_back(new WalkingEnemy(enemyTex, j*32, i*32, 40, 50, 5, 0.05f, 100.0f));
                 TileMap[i][j] = ' ';
@@ -347,6 +377,19 @@ int main() {
                 entities.push_back(new JumpingEnemy(enemyTex, j*32, i*32, 40, 50, 5, 0.05f, 100.0f, 0.3f));
                 TileMap[i][j] = ' ';
             }     
+            //^ Armored enemies 
+            if (TileMap[i][j] == 'D') {
+                entities.push_back(new ArmoredWalkingEnemy(enemyTex, j*32, i*32, 40, 50, 0.05f, 100.0f));
+                TileMap[i][j] = ' ';
+            }
+            if (TileMap[i][j] == 'V') {
+                entities.push_back(new ArmoredFlyingEnemy(enemyTex, j * 32, i * 32, 40, 50, 0.05f, 100.0f));
+                TileMap[i][j] = ' ';
+            }
+            if (TileMap[i][j] == 'M') {
+                entities.push_back(new ArmoredJumpingEnemy(enemyTex, j*32, i*32, 40, 50, 0.05f, 100.0f, 0.3f));
+                TileMap[i][j] = ' ';
+            }   
         }
     }
 
@@ -364,7 +407,7 @@ int main() {
             if (event.type == Event::Closed)
                 window.close();
         }
-        //! -------------------------- Keyboard actions -----------------------
+        //! -------------------------- Keyboard actions --------------------------
         if (Keyboard::isKeyPressed(Keyboard::Left)) player.dx = -0.1;
         if (Keyboard::isKeyPressed(Keyboard::Right)) player.dx = 0.1;
         if (Keyboard::isKeyPressed(Keyboard::Up) && player.onGround) {
@@ -378,7 +421,7 @@ int main() {
             }
         }
 
-        //! -------------------------- Game cycle logic ---------------------------
+        //! -------------------------- Game cycle logic --------------------------
         for (auto it = entities.begin(); it != entities.end();) {
             Entity* entity = *it;
             entity->update(time);
