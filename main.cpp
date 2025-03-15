@@ -11,7 +11,7 @@ String TileMap[H] = {
     "                                             ",
     "B                                           B",
     "B                                B          B",
-    "B                 F                         B",
+    "B                 V                         B",
     "B                           E               B",
     "B         0000         BBBBBBBBBBB          B",
     "B                                B          B",
@@ -263,7 +263,7 @@ class JumpingEnemy : public WalkingEnemy {
               jumpForce(jumpForce) {
             jumpInterval = rand() % 3000 + 2000;
             jumpTimer = jumpInterval;
-            sprite.setTextureRect(IntRect(0, 0, 200, 300));  //todo redo the texture
+            sprite.setTextureRect(IntRect(0, 0, 39, 45));  //todo redo the texture
         }
     
         void update(float time) override {
@@ -284,7 +284,7 @@ class FlyingEnemy : public Enemy {
 public:
     FlyingEnemy(Texture &image, float x, float y, float w, float h, int armor, float speed, float range)
         : Enemy(image, x, y, w, h, 0, speed, range) {
-        sprite.setTextureRect(IntRect(247, 583, 8, 8)); //todo redo the texture
+        sprite.setTextureRect(IntRect(0, 0, 42, 42));
     }
 
     void update(float time) override {
@@ -317,7 +317,7 @@ public:
 class ArmoredWalkingEnemy : public WalkingEnemy {
     public:
         ArmoredWalkingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range)
-            : WalkingEnemy(image, x, y, w, h, 10, speed, range) {
+            : WalkingEnemy(image, x, y, w, h, 19, speed, range) {
             sprite.setTextureRect(IntRect(0, 0, 34, 45));
         }
 };
@@ -325,16 +325,16 @@ class ArmoredWalkingEnemy : public WalkingEnemy {
 class ArmoredJumpingEnemy : public JumpingEnemy {
 public:
     ArmoredJumpingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range, float jumpForce = 0.35f)
-        : JumpingEnemy(image, x, y, w, h, 10, speed, range, jumpForce) {
-        sprite.setTextureRect(IntRect(200, 0, 200, 300)); //todo redo the texture
+        : JumpingEnemy(image, x, y, w, h, 19, speed, range, jumpForce) {
+        sprite.setTextureRect(IntRect(0, 0, 39, 45));
     }
 };
 
 class ArmoredFlyingEnemy : public FlyingEnemy {
 public:
     ArmoredFlyingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range)
-        : FlyingEnemy(image, x, y, w, h, 10, speed, range) {
-        sprite.setTextureRect(IntRect(300, 0, 40, 50)); //todo redo the texture
+        : FlyingEnemy(image, x, y, w, h, 19, speed, range) {
+        sprite.setTextureRect(IntRect(0, 0, 47, 45));
     }
 };
 
@@ -348,16 +348,23 @@ int main() {
     camera.setCenter(400, 300);
     window.setView(camera);
 
-    Texture playerTex, enemyTex, bulletTex, fTex;
+    Texture playerTex, enemyTex, bulletTex;
     playerTex.loadFromFile("assets/fang.png");
     enemyTex.loadFromFile("assets/foes.png");
-    fTex.loadFromFile("assets/fang.png");
     bulletTex.loadFromFile("assets/fang.png");
-    
+
     //! ----------------------- walking enemy ----------------------------
     Texture WalkingEnemyTex,ArmoredWalkingEnemyTex;
     WalkingEnemyTex.loadFromFile("assets/edited_assets/walkingEnemy.png");
     ArmoredWalkingEnemyTex.loadFromFile("assets/edited_assets/armoredWalkingEnemy.png");
+    //! ----------------------- flying enemy ----------------------------
+    Texture FlyingEnemyTex,ArmoredFlyingEnemyTex;
+    FlyingEnemyTex.loadFromFile("assets/edited_assets/flyingEnemy.png");
+    ArmoredFlyingEnemyTex.loadFromFile("assets/edited_assets/armoredFlyingEnemy.png");
+    //! ----------------------- jumping enemy ----------------------------
+    Texture JumpingEnemyTex,ArmoredJumpingTex;
+    JumpingEnemyTex.loadFromFile("assets/edited_assets/jumpingEnemy.png");
+    ArmoredJumpingTex.loadFromFile("assets/edited_assets/armoredJumpingEnemy.png");
 
     Weapon weapon(200.0f);
     weapon.setBulletTexture(bulletTex);
@@ -375,11 +382,11 @@ int main() {
                 TileMap[i][j] = ' ';
             }
             if (TileMap[i][j] == 'F') {
-                entities.push_back(new FlyingEnemy(fTex, j * 32, i * 32, 40, 50, 5, 0.05f, 100.0f));
+                entities.push_back(new FlyingEnemy(FlyingEnemyTex, j * 32, i * 32, 42, 42, 5, 0.05f, 100.0f));
                 TileMap[i][j] = ' ';
             }
             if (TileMap[i][j] == 'J') {
-                entities.push_back(new JumpingEnemy(enemyTex, j*32, i*32, 40, 50, 5, 0.05f, 100.0f, 0.3f));
+                entities.push_back(new JumpingEnemy(JumpingEnemyTex, j*32, i*32, 39, 45, 5, 0.05f, 100.0f, 0.3f));
                 TileMap[i][j] = ' ';
             }     
             //^ Armored enemies 
@@ -388,11 +395,11 @@ int main() {
                 TileMap[i][j] = ' ';
             }
             if (TileMap[i][j] == 'V') {
-                entities.push_back(new ArmoredFlyingEnemy(enemyTex, j * 32, i * 32, 40, 50, 0.05f, 100.0f));
+                entities.push_back(new ArmoredFlyingEnemy(ArmoredFlyingEnemyTex, j * 32, i * 32, 47, 45, 0.05f, 100.0f));
                 TileMap[i][j] = ' ';
             }
             if (TileMap[i][j] == 'M') {
-                entities.push_back(new ArmoredJumpingEnemy(enemyTex, j*32, i*32, 40, 50, 0.05f, 100.0f, 0.3f));
+                entities.push_back(new ArmoredJumpingEnemy(ArmoredJumpingTex, j*32, i*32, 39, 45, 0.05f, 100.0f, 0.3f));
                 TileMap[i][j] = ' ';
             }   
         }
@@ -476,7 +483,6 @@ int main() {
         }
 
         for (auto& entity : entities) entity->draw(window);
-
         window.display();
     }
 
