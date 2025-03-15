@@ -1,6 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
-
+#include <iostream>
 using namespace sf;
 
 const int H = 12;
@@ -193,11 +193,14 @@ class Enemy : public Entity {
         bool isAlive;
     
         Enemy(Texture &image, float x, float y, float w, float h, int armor, float speed, float range)
-            : Entity(image, x, y, w, h), armor(armor), health(100), speed(speed), 
-              moveRange(range), startX(x), isAlive(true) {}
+        : Entity(image, x, y, w, h), armor(armor), health(100), speed(speed), 
+          moveRange(range), startX(x), isAlive(true) {}
     
         virtual void takeDamage(int damage) {
-            health -= (damage - armor);
+            int actualDamage = damage - armor;
+            if (actualDamage < 0) actualDamage = 0;
+            health -= actualDamage;
+            std::cout << "Health: " << health << ", Armor: " << armor << std::endl;
             if (health <= 0) isAlive = false;
         }
     
@@ -208,11 +211,10 @@ class Enemy : public Entity {
 class WalkingEnemy : public Enemy {
 public:
     bool onGround;
-
-    WalkingEnemy(Texture &image, float x, float y, float w, float h, int armor, float speed, float range)
-        : Enemy(image, x, y, w, h, 0, speed, range), onGround(false) {
-            sprite.setTextureRect(IntRect(0, 0, 34, 45));
-        }
+    WalkingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range)
+        : Enemy(image, x, y, w, h, 0, speed, range), onGround(false) { // armor = 0
+        sprite.setTextureRect(IntRect(0, 0, 34, 45));
+    }
 
     void update(float time) override {
         float nextX = rect.left + speed * time;
@@ -258,8 +260,8 @@ class JumpingEnemy : public WalkingEnemy {
     
     public:
         JumpingEnemy(Texture &image, float x, float y, float w, float h, 
-                    int armor, float speed, float range, float jumpForce = 0.35f)
-            : WalkingEnemy(image, x, y, w, h, 0, speed, 200),
+                    float speed, float range, float jumpForce = 0.35f)
+            : WalkingEnemy(image, x, y, w, h, speed, range), // armor = 0
               jumpForce(jumpForce) {
             jumpInterval = rand() % 3000 + 2000;
             jumpTimer = jumpInterval;
@@ -282,8 +284,8 @@ class JumpingEnemy : public WalkingEnemy {
 };   
 class FlyingEnemy : public Enemy {
 public:
-    FlyingEnemy(Texture &image, float x, float y, float w, float h, int armor, float speed, float range)
-        : Enemy(image, x, y, w, h, 0, speed, range) {
+    FlyingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range)
+        : Enemy(image, x, y, w, h, 0, speed, range) { // armor = 0
         sprite.setTextureRect(IntRect(0, 0, 42, 42));
     }
 
@@ -317,7 +319,8 @@ public:
 class ArmoredWalkingEnemy : public WalkingEnemy {
     public:
         ArmoredWalkingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range)
-            : WalkingEnemy(image, x, y, w, h, 19, speed, range) {
+        : WalkingEnemy(image, x, y, w, h, speed, range) {
+            armor = 10; // armor = 10
             sprite.setTextureRect(IntRect(0, 0, 34, 45));
         }
 };
@@ -325,17 +328,19 @@ class ArmoredWalkingEnemy : public WalkingEnemy {
 class ArmoredJumpingEnemy : public JumpingEnemy {
 public:
     ArmoredJumpingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range, float jumpForce = 0.35f)
-        : JumpingEnemy(image, x, y, w, h, 19, speed, range, jumpForce) {
-        sprite.setTextureRect(IntRect(0, 0, 39, 45));
-    }
+        : JumpingEnemy(image, x, y, w, h, speed, range, jumpForce) {
+            armor = 10; // armor = 10
+            sprite.setTextureRect(IntRect(0, 0, 39, 45));
+        }
 };
 
 class ArmoredFlyingEnemy : public FlyingEnemy {
 public:
     ArmoredFlyingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range)
-        : FlyingEnemy(image, x, y, w, h, 19, speed, range) {
-        sprite.setTextureRect(IntRect(0, 0, 47, 45));
-    }
+        : FlyingEnemy(image, x, y, w, h, speed, range) {
+            armor = 10; // armor = 10
+            sprite.setTextureRect(IntRect(0, 0, 47, 45));
+        }
 };
 
 //! --------------------------------------------- Main function ---------------------------------------------
@@ -348,11 +353,10 @@ int main() {
     camera.setCenter(400, 300);
     window.setView(camera);
 
-    Texture playerTex, enemyTex, bulletTex;
+    //! ----------------------- basic assets ----------------------------
+    Texture playerTex, bulletTex;
     playerTex.loadFromFile("assets/fang.png");
-    enemyTex.loadFromFile("assets/foes.png");
     bulletTex.loadFromFile("assets/fang.png");
-
     //! ----------------------- walking enemy ----------------------------
     Texture WalkingEnemyTex,ArmoredWalkingEnemyTex;
     WalkingEnemyTex.loadFromFile("assets/edited_assets/walkingEnemy.png");
@@ -378,15 +382,15 @@ int main() {
         for (int j = 0; j < W; j++) {
             //^ Defaulf enemies 
             if (TileMap[i][j] == 'E') {
-                entities.push_back(new WalkingEnemy(WalkingEnemyTex, j*32, i*32, 34, 45, 5, 0.05f, 100.0f));
+                entities.push_back(new WalkingEnemy(WalkingEnemyTex, j*32, i*32, 34, 45, 0.05f, 100.0f));
                 TileMap[i][j] = ' ';
             }
             if (TileMap[i][j] == 'F') {
-                entities.push_back(new FlyingEnemy(FlyingEnemyTex, j * 32, i * 32, 42, 42, 5, 0.05f, 100.0f));
+                entities.push_back(new FlyingEnemy(FlyingEnemyTex, j * 32, i * 32, 42, 42, 0.05f, 100.0f));
                 TileMap[i][j] = ' ';
             }
             if (TileMap[i][j] == 'J') {
-                entities.push_back(new JumpingEnemy(JumpingEnemyTex, j*32, i*32, 39, 45, 5, 0.05f, 100.0f, 0.3f));
+                entities.push_back(new JumpingEnemy(JumpingEnemyTex, j*32, i*32, 39, 45, 0.05f, 100.0f, 0.3f));
                 TileMap[i][j] = ' ';
             }     
             //^ Armored enemies 
@@ -395,7 +399,7 @@ int main() {
                 TileMap[i][j] = ' ';
             }
             if (TileMap[i][j] == 'V') {
-                entities.push_back(new ArmoredFlyingEnemy(ArmoredFlyingEnemyTex, j * 32, i * 32, 47, 45, 0.05f, 100.0f));
+                entities.push_back(new ArmoredFlyingEnemy(ArmoredFlyingEnemyTex, j*32, i*32, 47, 45, 0.05f, 100.0f));
                 TileMap[i][j] = ' ';
             }
             if (TileMap[i][j] == 'M') {
