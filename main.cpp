@@ -13,7 +13,7 @@ String TileMap[H] = {
     "B                                B          B",
     "B                 V                         B",
     "B                           E               B",
-    "B         0000         BBBBBBBBBBB          B",
+    "B         CCCC         BBBBBBBBBBB          B",
     "B                                B          B",
     "BBB                              B          B",
     "B              BB                BB         B",
@@ -42,7 +42,48 @@ public:
         window.draw(sprite);
     }
 };
+//! ---------- stuct entity -------------
+class Coin : public Entity {
+    public:
+        Coin(Texture &image, float x, float y) 
+            : Entity(image, x, y, 7, 8) {
+            sprite.setTextureRect(IntRect(4, 1348, 7, 8)); 
+        }
+        void update(float time) override {} 
+};
 
+class LeftRightPlatform : public Entity {
+    public:
+        float moveRange; 
+        float startX;  
+        float speed;   
+        bool movingRight; 
+    
+        LeftRightPlatform(Texture &image, float x, float y, float range, float spd)
+            : Entity(image, x, y, 64, 16),
+              moveRange(range),
+              startX(x),
+              speed(spd),
+              movingRight(true) {
+            sprite.setTextureRect(IntRect(0, 0, 64, 16));
+        }
+    
+        void update(float time) override {
+            if (movingRight) {
+                rect.left += speed * time;
+                if (rect.left > startX + moveRange) {
+                    movingRight = false;
+                }
+            } else {
+                rect.left -= speed * time;
+                if (rect.left < startX) {
+                    movingRight = true;
+                }
+            }
+
+            sprite.setPosition(rect.left, rect.top);
+        }
+    };
 //! --------------------------------------------- Weapons ---------------------------------------------
 class Bullet : public Entity {
     public:
@@ -104,6 +145,7 @@ class Weapon {
 
 class Player : public Entity {
 public:
+    int coins;
     bool onGround;
     float currentFrame;
     float idleFrame;
@@ -112,10 +154,15 @@ public:
 
     Player(Texture &image, Weapon &weapon)
         : Entity(image, 7*32, 9*32, 40, 50),
+          coins(0),
           weapon(weapon),
           onGround(false),
           currentFrame(0),
           lastAction(true) {}
+
+    void addCoins(int amount) {
+        coins += amount;
+    }
 
     void update(float time) override {
         rect.left += dx * time;
@@ -261,7 +308,7 @@ class JumpingEnemy : public WalkingEnemy {
     public:
         JumpingEnemy(Texture &image, float x, float y, float w, float h, 
                     float speed, float range, float jumpForce = 0.35f)
-            : WalkingEnemy(image, x, y, w, h, speed, range), // armor = 0
+            : WalkingEnemy(image, x, y, w, h, speed, range),
               jumpForce(jumpForce) {
             jumpInterval = rand() % 3000 + 2000;
             jumpTimer = jumpInterval;
@@ -285,7 +332,7 @@ class JumpingEnemy : public WalkingEnemy {
 class FlyingEnemy : public Enemy {
 public:
     FlyingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range)
-        : Enemy(image, x, y, w, h, 0, speed, range) { // armor = 0
+        : Enemy(image, x, y, w, h, 0, speed, range) {
         sprite.setTextureRect(IntRect(0, 0, 42, 42));
     }
 
@@ -320,7 +367,7 @@ class ArmoredWalkingEnemy : public WalkingEnemy {
     public:
         ArmoredWalkingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range)
         : WalkingEnemy(image, x, y, w, h, speed, range) {
-            armor = 10; // armor = 10
+            armor = 10;
             sprite.setTextureRect(IntRect(0, 0, 34, 45));
         }
 };
@@ -329,7 +376,7 @@ class ArmoredJumpingEnemy : public JumpingEnemy {
 public:
     ArmoredJumpingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range, float jumpForce = 0.35f)
         : JumpingEnemy(image, x, y, w, h, speed, range, jumpForce) {
-            armor = 10; // armor = 10
+            armor = 10;
             sprite.setTextureRect(IntRect(0, 0, 39, 45));
         }
 };
@@ -338,23 +385,38 @@ class ArmoredFlyingEnemy : public FlyingEnemy {
 public:
     ArmoredFlyingEnemy(Texture &image, float x, float y, float w, float h, float speed, float range)
         : FlyingEnemy(image, x, y, w, h, speed, range) {
-            armor = 10; // armor = 10
+            armor = 10;
             sprite.setTextureRect(IntRect(0, 0, 47, 45));
         }
 };
 
 //! --------------------------------------------- Main function ---------------------------------------------
 int main() {
+    View uiView;
     RenderWindow window(VideoMode(800, 600), "Dakaraima!", Style::Titlebar | Style::Close);
     window.setSize(Vector2u(800, 600));
+    uiView.setSize(window.getSize().x, window.getSize().y); 
+    uiView.setCenter(window.getSize().x / 2, window.getSize().y / 2);
 
     View camera;
     camera.setSize(720, 540);
     camera.setCenter(400, 300);
     window.setView(camera);
+    //! load font
+    Font font;
+    if (!font.loadFromFile("assets/arial.ttf")) {
+        return EXIT_FAILURE;
+    }
+
+    Text coinText;
+    coinText.setFont(font);
+    coinText.setCharacterSize(24);
+    coinText.setFillColor(Color::Black);
+    coinText.setPosition(10, 10);
 
     //! ----------------------- basic assets ----------------------------
-    Texture playerTex, bulletTex;
+    Texture playerTex, bulletTex,basicAssets;
+    basicAssets.loadFromFile("assets/World-Tiles.png");
     playerTex.loadFromFile("assets/fang.png");
     bulletTex.loadFromFile("assets/fang.png");
     //! ----------------------- walking enemy ----------------------------
@@ -405,7 +467,16 @@ int main() {
             if (TileMap[i][j] == 'M') {
                 entities.push_back(new ArmoredJumpingEnemy(ArmoredJumpingTex, j*32, i*32, 39, 45, 0.05f, 100.0f, 0.3f));
                 TileMap[i][j] = ' ';
-            }   
+            }  
+            //^ game entity 
+            if (TileMap[i][j] == 'C') {
+                entities.push_back(new Coin(basicAssets, j*32 + 8, i*32 + 8));
+                TileMap[i][j] = ' ';
+            }
+            if (TileMap[i][j] == 'P') {
+                entities.push_back(new LeftRightPlatform(basicAssets, j * 32, i * 32, 100.0f, 0.05f));
+                TileMap[i][j] = ' ';
+            }
         }
     }
 
@@ -430,7 +501,6 @@ int main() {
             player.dy = -0.35;
             player.onGround = false;
         }
-
         if (Keyboard::isKeyPressed(Keyboard::Space)) {
             if (player.weapon.tryFire(entities, player.rect.left + (player.lastAction ? 40 : -10),
                                         player.rect.top + 10, player.lastAction)) {
@@ -467,19 +537,32 @@ int main() {
                 it = entities.erase(it);
                 continue;
             }
+            //! coins collision
+            if (auto* coin = dynamic_cast<Coin*>(entity)) {
+                if (player.rect.intersects(coin->rect)) {
+                    player.addCoins(1);
+                    std::cout<<"coin added\n";
+                    delete coin; 
+                    it = entities.erase(it);
+                    continue;
+                }
+            }
 
             ++it;
         }
+        
 
         camera.setCenter(player.rect.left + player.rect.width / 2,
                             player.rect.top + player.rect.height / 2 - 70);
         window.setView(camera);
+
+        coinText.setString("Coins: " + std::to_string(player.coins));
         window.clear(Color::White);
+
 
         for (int i = 0; i < H; i++) {
             for (int j = 0; j < W; j++) {
                 if (TileMap[i][j] == 'B') rectangle.setFillColor(Color::Black);
-                if (TileMap[i][j] == '0') rectangle.setFillColor(Color::Green);
                 if (TileMap[i][j] == ' ') continue;
                 rectangle.setPosition(j * 32, i * 32);
                 window.draw(rectangle);
@@ -487,6 +570,8 @@ int main() {
         }
 
         for (auto& entity : entities) entity->draw(window);
+        window.setView(uiView);
+        window.draw(coinText);
         window.display();
     }
 
