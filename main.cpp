@@ -9,16 +9,16 @@ const int W = 45;
 //! My idea is to create a game engine.
 String TileMap[H] = {
     "                                             ",
-    "B                                           B",
+    "B                                H          B",
     "B                                B          B",
     "B                 V                         B",
     "B                           E               B",
     "B         CCCC         BBBBBBBBBBB          B",
     "B                                B          B",
-    "BBB                              B          B",
+    "BBB                              BI         B",
     "B       L      BB                BB         B",
     "B              BB    U    J                 B",
-    "B    B         BB         BB           D    B", 
+    "B    B         BB         BB    S      D    B", 
     "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
 };
 
@@ -141,36 +141,168 @@ class Bullet : public Entity {
 };
 
 class Weapon {
-    float fireDelay;
-    float currentDelay;
-
     public:
-        Texture bulletTexture;
-        Weapon(float delay) 
-            : fireDelay(delay), currentDelay(0) {}
+        virtual ~Weapon() = default; // Important for polymorphism
+        virtual bool tryFire(std::vector<Entity*>& bullets, float x, float y, bool direction) = 0;
+        virtual void update(float time) = 0;
+        virtual void setBulletTexture(Texture& texture) = 0;
+        virtual std::string getName() const = 0;
+};
 
-        void setBulletTexture(Texture &texture) {
+class Pistol : public Weapon {
+    private:
+        float fireDelay;
+        float currentDelay;
+        Texture bulletTexture;
+        int damage;
+    
+    public:
+        Pistol(float delay = 420.0f, int dmg = 25)
+            : fireDelay(delay), currentDelay(0), damage(dmg) {}
+    
+        void setBulletTexture(Texture& texture) override {
             bulletTexture = texture;
         }
-
-        bool tryFire(std::vector<Entity*>& bullets, float x, float y, bool direction) {
+        
+        std::string getName() const override {
+            return "Pistol";
+        }
+    
+        bool tryFire(std::vector<Entity*>& bullets, float x, float y, bool direction) override {
             if (currentDelay <= 0) {
                 bullets.push_back(new Bullet(bulletTexture,
                     x + (direction ? 6 : -6),
                     y + 6,
                     direction,
                     0.5f,
-                    25));
+                    damage));
                 currentDelay = fireDelay;
                 return true;
             }
             return false;
         }
-        
-
-        void update(float time) {
-            if(currentDelay > 0) currentDelay -= time;
+    
+        void update(float time) override {
+            if (currentDelay > 0) currentDelay -= time;
     }
+};
+class Minigun : public Weapon {
+    private:
+        float fireDelay;
+        float currentDelay;
+        Texture bulletTexture;
+        int damage;
+        int bulletsPerShot;
+    
+    public:
+        Minigun(float delay = 150.0f, int dmg = 11, int bullets = 3)
+            : fireDelay(delay), currentDelay(0), damage(dmg), bulletsPerShot(bullets) {}
+    
+        void setBulletTexture(Texture& texture) override {
+            bulletTexture = texture;
+        }
+
+        std::string getName() const override {
+            return "Minigun";
+        }
+    
+        bool tryFire(std::vector<Entity*>& bullets, float x, float y, bool direction) override {
+            if (currentDelay <= 0) {
+                for (int i = 0; i < bulletsPerShot; i++) {
+                    bullets.push_back(new Bullet(bulletTexture,
+                        x + (direction ? 6 : -6),
+                        y + 6 + (i * 3),
+                        direction,
+                        0.5f + (i * 0.1f),
+                        damage));
+                }
+                currentDelay = fireDelay;
+                return true;
+            }
+            return false;
+        }
+    
+        void update(float time) override {
+            if (currentDelay > 0) currentDelay -= time;
+        }
+};
+class Shotgun : public Weapon {
+    private:
+        float fireDelay;
+        float currentDelay;
+        Texture bulletTexture;
+        int damage;
+        int pelletCount;
+    
+    public:
+        Shotgun(float delay = 2000.0f, int dmg = 55, int pellets = 2)
+            : fireDelay(delay), currentDelay(0), damage(dmg), pelletCount(pellets) {}
+    
+        void setBulletTexture(Texture& texture) override {
+            bulletTexture = texture;
+        }
+
+        std::string getName() const override {
+            return "Shotgun";
+        }
+    
+        bool tryFire(std::vector<Entity*>& bullets, float x, float y, bool direction) override {
+            if (currentDelay <= 0) {
+                for (int i = 0; i < pelletCount; i++) {
+                    bullets.push_back(new Bullet(bulletTexture,
+                        x + (direction ? 6 : -6),
+                        y + 6 + (i * 5),
+                        direction,
+                        0.5f + (i * 0.1f),
+                        damage));
+                }
+                currentDelay = fireDelay;
+                return true;
+            }
+            return false;
+        }
+    
+        void update(float time) override {
+            if (currentDelay > 0) currentDelay -= time;
+        }
+};
+
+class Rifle : public Weapon {
+    private:
+        float fireDelay;
+        float currentDelay;
+        Texture bulletTexture;
+        int damage;
+    
+    public:
+        Rifle(float delay = 200.0f, int dmg = 18)
+            : fireDelay(delay), currentDelay(0), damage(dmg) {}
+    
+        void setBulletTexture(Texture& texture) override {
+            bulletTexture = texture;
+        }
+    
+        bool tryFire(std::vector<Entity*>& bullets, float x, float y, bool direction) override {
+            if (currentDelay <= 0) {
+                bullets.push_back(new Bullet(bulletTexture,
+                    x + (direction ? 6 : -6),
+                    y + 6,
+                    direction,
+                    0.7f,
+                    damage));
+                currentDelay = fireDelay;
+                return true;
+            }
+            return false;
+        }
+    
+        void update(float time) override {
+            if (currentDelay > 0) currentDelay -= time;
+        }
+    
+        std::string getName() const override {
+            return "Rifle";
+        }
 };
 
 class Player : public Entity {
@@ -180,21 +312,64 @@ public:
     float currentFrame;
     float idleFrame;
     bool lastAction;
-    Weapon weapon;
+    Weapon* currentWeapon;
+    
+    int health;
+    int maxHealth;
+    float invincibilityTime;
+    bool isInvincible;
 
-    Player(Texture &image, Weapon &weapon)
+    float speedMultiplier;
+    float speedBoostTime;
+    bool isSpeedBoosted;
+
+    Player(Texture& image, Weapon* startingWeapon)
         : Entity(image, 7*32, 9*32, 40, 50),
           coins(0),
-          weapon(weapon),
           onGround(false),
           currentFrame(0),
-          lastAction(true){}
+          lastAction(true),
+          currentWeapon(startingWeapon),
+          health(100), 
+          maxHealth(100),
+          invincibilityTime(0),
+          speedMultiplier(1.0f),
+          speedBoostTime(0),
+          isSpeedBoosted(false),
+          isInvincible(false) {} 
 
     void addCoins(int amount) {
         coins += amount;
     }
 
+    void takeDamage(int damage) {
+        if(!isInvincible) {
+            health -= damage;
+            std::cout<<"damage was taken!!!!!!!!!!!!!!!\n";
+            if(health < 0) health = 0;
+            invincibilityTime = 1500.0f;
+            isInvincible = true;
+        }
+    }
+
+    void switchWeapon(Weapon* newWeapon) {
+        currentWeapon = newWeapon;
+    }
+
     void update(float time) override {
+        if(isSpeedBoosted) {
+            speedBoostTime -= time;
+            if(speedBoostTime <= 0) {
+                speedMultiplier = 1.0f;
+                isSpeedBoosted = false;
+            }
+        }
+        if(isInvincible) {
+            invincibilityTime -= time;
+            if(invincibilityTime <= 0) {
+                isInvincible = false;
+            }
+        }
         rect.left += dx * time;
         Collision(0);
 
@@ -225,7 +400,9 @@ public:
             }
         }
 
-        weapon.update(time);
+        if (currentWeapon) {
+            currentWeapon->update(time);
+        }
         dx = 0;
     };
 
@@ -248,6 +425,7 @@ public:
                 if (TileMap[i][j] == '0') TileMap[i][j] = ' ';
             }
     }
+    
 };
 //! Basic enemy
 class Enemy : public Entity {
@@ -409,7 +587,31 @@ public:
             sprite.setTextureRect(IntRect(0, 0, 47, 45));
         }
 };
-
+//! --------------------------------------------- Extra mechanics -------------------------------------------
+class MedKit : public Entity {
+    public:
+        MedKit(Texture &image, float x, float y) 
+            : Entity(image, x, y, 7, 6) { 
+            sprite.setTextureRect(IntRect(100, 693, 7, 6)); 
+        }
+        void update(float time) override {}
+};
+class InvincibilitySphere : public Entity {
+    public:
+        InvincibilitySphere(Texture &image, float x, float y) 
+            : Entity(image, x, y, 5, 5) {
+            sprite.setTextureRect(IntRect(5, 902, 5, 5));
+        }
+        void update(float time) override {}
+};
+class SpeedBerry : public Entity {
+    public:
+        SpeedBerry(Texture &image, float x, float y) 
+            : Entity(image, x, y, 10, 9) {
+            sprite.setTextureRect(IntRect(36, 311, 10, 9));
+        }
+        void update(float time) override {}
+};
 //! --------------------------------------------- Main function ---------------------------------------------
 int main() {
     View uiView;
@@ -428,11 +630,21 @@ int main() {
         return EXIT_FAILURE;
     }
 
-    Text coinText;
+    Text coinText,weaponText,hpText;
+    hpText.setFont(font);
+    hpText.setCharacterSize(24);
+    hpText.setFillColor(Color::Black);
+    hpText.setPosition(10, 80);
+
     coinText.setFont(font);
     coinText.setCharacterSize(24);
     coinText.setFillColor(Color::Black);
-    coinText.setPosition(10, 10);
+    coinText.setPosition(10, 45);
+
+    weaponText.setFont(font);
+    weaponText.setCharacterSize(24); 
+    weaponText.setFillColor(Color::Black);
+    weaponText.setPosition(10, 10);
 
     //! ----------------------- basic assets ----------------------------
     Texture playerTex, bulletTex,basicAssets;
@@ -451,13 +663,17 @@ int main() {
     Texture JumpingEnemyTex,ArmoredJumpingTex;
     JumpingEnemyTex.loadFromFile("assets/edited_assets/jumpingEnemy.png");
     ArmoredJumpingTex.loadFromFile("assets/edited_assets/armoredJumpingEnemy.png");
+    //! ------------------------------ Weapons ----------------------------
+    Pistol pistol;Minigun minigun;Shotgun shotgun;Rifle rifle;
+    pistol.setBulletTexture(bulletTex);
+    minigun.setBulletTexture(bulletTex);
+    shotgun.setBulletTexture(bulletTex);
+    rifle.setBulletTexture(bulletTex);
 
-    Weapon weapon(200.0f);
-    weapon.setBulletTexture(bulletTex);
-    Player player(playerTex, weapon);
-
+    Player player(playerTex, &pistol);
     std::vector<Entity*> entities;
     entities.push_back(&player);
+    weaponText.setString("Weapon: " + player.currentWeapon->getName());
 
     //! Enemies spawn, after spawning an enemy, game creates an empty space in spawn. point
     for (int i = 0; i < H; i++) {
@@ -501,6 +717,18 @@ int main() {
                 entities.push_back(new VerticalMovingPlatform(basicAssets, j * 32, i * 32, 64, 16, 100.0f, 0.05f));
                 TileMap[i][j] = ' ';
             }
+            if (TileMap[i][j] == 'H') {
+                entities.push_back(new MedKit(basicAssets, j*32+12, i*32+8));
+                TileMap[i][j] = ' ';
+            }
+            if (TileMap[i][j] == 'I') {
+                entities.push_back(new InvincibilitySphere(basicAssets, j*32+15, i*32+5));
+                TileMap[i][j] = ' ';
+            }
+            if (TileMap[i][j] == 'S') {
+                entities.push_back(new SpeedBerry(basicAssets, j*32, i*32));
+                TileMap[i][j] = ' ';
+            }
         }
     }
 
@@ -519,17 +747,40 @@ int main() {
                 window.close();
         }
         //! -------------------------- Keyboard actions --------------------------
-        if (Keyboard::isKeyPressed(Keyboard::Left)) player.dx = -0.1;
-        if (Keyboard::isKeyPressed(Keyboard::Right)) player.dx = 0.1;
+        if (Keyboard::isKeyPressed(Keyboard::Left)) 
+            player.dx = -0.1f * player.speedMultiplier;
+
+        if (Keyboard::isKeyPressed(Keyboard::Right)) 
+            player.dx = 0.1f * player.speedMultiplier;
+
         if (Keyboard::isKeyPressed(Keyboard::Up) && player.onGround) {
             player.dy = -0.35;
             player.onGround = false;
         }
         if (Keyboard::isKeyPressed(Keyboard::Space)) {
-            if (player.weapon.tryFire(entities, player.rect.left + (player.lastAction ? 40 : -10),
-                                        player.rect.top + 10, player.lastAction)) {
+            if (player.currentWeapon && player.currentWeapon->tryFire(entities, 
+                    player.rect.left + (player.lastAction ? 40 : -10),
+                    player.rect.top + 10,
+                    player.lastAction)) { 
             }
         }
+        if (Keyboard::isKeyPressed(Keyboard::Num1)) {
+            player.switchWeapon(&pistol);
+            weaponText.setString("Weapon: " + player.currentWeapon->getName());
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Num2)) {
+            player.switchWeapon(&minigun);
+            weaponText.setString("Weapon: " + player.currentWeapon->getName());
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Num3)) {
+            player.switchWeapon(&shotgun);
+            weaponText.setString("Weapon: " + player.currentWeapon->getName());
+        }
+        if (Keyboard::isKeyPressed(Keyboard::Num4)) {
+            player.switchWeapon(&rifle);
+            weaponText.setString("Weapon: " + player.currentWeapon->getName());
+        }
+
 
         //! -------------------------- Game cycle logic --------------------------
         for (auto it = entities.begin(); it != entities.end();) {
@@ -571,6 +822,35 @@ int main() {
                     continue;
                 }
             }
+            if (auto* medkit = dynamic_cast<MedKit*>(entity)) {
+                if (player.rect.intersects(medkit->rect)) {
+                    player.health = std::min(player.health + 35, player.maxHealth);
+                    std::cout << "Health restored!\n";
+                    delete medkit;
+                    it = entities.erase(it);
+                    continue;
+                }
+            }
+            if (auto* invincibilitySphere = dynamic_cast<InvincibilitySphere*>(entity)) {
+                if (player.rect.intersects(invincibilitySphere->rect)) {
+                    player.isInvincible = true;
+                    player.invincibilityTime = 5000.0f;
+                    std::cout << "Invincibility activated!\n";
+                    delete invincibilitySphere;
+                    it = entities.erase(it);
+                    continue;
+                }
+            }
+            if (auto* speedBerry = dynamic_cast<SpeedBerry*>(entity)) {
+                if (player.rect.intersects(speedBerry->rect)) {
+                    player.speedMultiplier = 1.25f;
+                    player.speedBoostTime = 10000.0f;
+                    player.isSpeedBoosted = true;
+                    delete speedBerry;
+                    it = entities.erase(it);
+                    continue;
+                }
+            }
             ++it;
         }
         for (auto* entity : entities) {
@@ -603,6 +883,12 @@ int main() {
                     }
                 }
             }
+            if (auto* enemy = dynamic_cast<Enemy*>(entity)) {
+                if(enemy->isAlive && player.rect.intersects(enemy->rect)) {
+                    player.takeDamage(20); 
+                }
+            }
+            
         }
         
 
@@ -610,6 +896,7 @@ int main() {
                             player.rect.top + player.rect.height / 2 - 70);
         window.setView(camera);
 
+        hpText.setString("HP: " + std::to_string(player.health) + "/" + std::to_string(player.maxHealth));
         coinText.setString("Coins: " + std::to_string(player.coins));
         window.clear(Color::White);
 
@@ -622,10 +909,12 @@ int main() {
                 window.draw(rectangle);
             }
         }
-        
+
         for (auto& entity : entities) entity->draw(window);
         window.setView(uiView);
         window.draw(coinText);
+        window.draw(weaponText);
+        window.draw(hpText);
         window.display();
     }
 
