@@ -16,33 +16,33 @@ String TileMap[H] = {
     "B         CCCC         BBBBBBBBBBB          B",
     "B                                B          B",
     "BBB                              B          B",
-    "B              BB                BB         B",
-    "B              BB         J                 B",
+    "B       L      BB                BB         B",
+    "B              BB    U    J                 B",
     "B    B         BB         BB           D    B", 
     "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
 };
 
-//! Main class
+//! Main 
 class Entity {
-public:
-    Sprite sprite;
-    FloatRect rect;
-    float dx, dy;
-    bool isAlive;
-
-    Entity(Texture &image, float x, float y, float w, float h)
-        : rect(x, y, w, h), dx(0), dy(0), isAlive(true) {
-        sprite.setTexture(image);
-    }
-
-    virtual void update(float time) = 0;
+    public:
+        Sprite sprite;
+        FloatRect rect;
+        float dx, dy;
+        bool isAlive;
     
-    virtual void draw(RenderWindow &window) {
-        sprite.setPosition(rect.left, rect.top);
-        window.draw(sprite);
-    }
+        Entity(Texture &image, float x, float y, float w, float h)
+            : rect(x, y, w, h), dx(0), dy(0), isAlive(true) {
+            sprite.setTexture(image);
+        }
+    
+        virtual void update(float time) = 0;
+        
+        virtual void draw(RenderWindow &window) {
+            sprite.setPosition(rect.left, rect.top);
+            window.draw(sprite);
+        }
 };
-//! ---------- stuct entity -------------
+//! ------------------------------------------- Stuct entity --------------------------------------------
 class Coin : public Entity {
     public:
         Coin(Texture &image, float x, float y) 
@@ -52,38 +52,68 @@ class Coin : public Entity {
         void update(float time) override {} 
 };
 
-class LeftRightPlatform : public Entity {
-    public:
-        float moveRange; 
-        float startX;  
-        float speed;   
-        bool movingRight; 
+//! ------------------------------------------- Moving platforms -----------------------------------------
+class MovingPlatform : public Entity {
+    private:
+        float moveRange;
+        float startX;
+        float speed;
+        bool movingRight;
     
-        LeftRightPlatform(Texture &image, float x, float y, float range, float spd)
-            : Entity(image, x, y, 64, 16),
-              moveRange(range),
-              startX(x),
-              speed(spd),
-              movingRight(true) {
-            sprite.setTextureRect(IntRect(0, 0, 64, 16));
+    public:
+        MovingPlatform(Texture &image, float x, float y, float w, float h, float range, float spd)
+            : Entity(image, x, y, w, h), moveRange(range), speed(spd), movingRight(true) {
+            startX = x;
+            sprite.setTextureRect(IntRect(1, 417, 64, 16));
         }
     
         void update(float time) override {
-            if (movingRight) {
-                rect.left += speed * time;
-                if (rect.left > startX + moveRange) {
-                    movingRight = false;
-                }
-            } else {
-                rect.left -= speed * time;
-                if (rect.left < startX) {
-                    movingRight = true;
-                }
+            float nextX = rect.left + (movingRight ? speed : -speed) * time;
+    
+            if (nextX > startX + moveRange) {
+                movingRight = false;
+                nextX = startX + moveRange;
+            } else if (nextX < startX - moveRange) {
+                movingRight = true;
+                nextX = startX - moveRange;
             }
+    
+            rect.left = nextX;
+            dx = (movingRight ? 2*speed : -2*speed);
+    }
+};
 
-            sprite.setPosition(rect.left, rect.top);
+class VerticalMovingPlatform : public Entity {
+    private:
+        float moveRange; 
+        float startY; 
+        float speed;   
+        bool movingDown; 
+    
+    public:
+        VerticalMovingPlatform(Texture &image, float x, float y, float w, float h, float range, float spd)
+            : Entity(image, x, y, w, h), moveRange(range), speed(spd), movingDown(true) {
+            startY = y; 
+            sprite.setTextureRect(IntRect(1, 417, 64, 16));
         }
-    };
+    
+        void update(float time) override {
+            float nextY = rect.top + (movingDown ? speed : -speed) * time;
+    
+            if (nextY > startY + moveRange) {
+                movingDown = false; 
+                nextY = startY + moveRange;
+            } else if (nextY < startY - moveRange) {
+                movingDown = true;
+                nextY = startY - moveRange;
+            }
+    
+            rect.top = nextY;
+            dy = (movingDown ? speed : -speed); 
+    }
+};
+
+
 //! --------------------------------------------- Weapons ---------------------------------------------
 class Bullet : public Entity {
     public:
@@ -158,7 +188,7 @@ public:
           weapon(weapon),
           onGround(false),
           currentFrame(0),
-          lastAction(true) {}
+          lastAction(true){}
 
     void addCoins(int amount) {
         coins += amount;
@@ -168,7 +198,7 @@ public:
         rect.left += dx * time;
         Collision(0);
 
-        if(!onGround) dy += 0.0005 * time;
+        if (!onGround) dy += 0.0005 * time;
         rect.top += dy * time;
         onGround = false;
         Collision(1);
@@ -176,19 +206,19 @@ public:
         currentFrame += 0.005 * time;
         idleFrame = currentFrame / 1.5;
 
-        if(currentFrame > 6) currentFrame -= 6;
-        if(idleFrame > 3) idleFrame -= 3;
+        if (currentFrame > 6) currentFrame -= 6;
+        if (idleFrame > 3) idleFrame -= 3;
 
-        if(dx > 0) {
+        if (dx > 0) {
             sprite.setTextureRect(IntRect(40 * int(currentFrame), 244, 40, 50));
             lastAction = true;
         } 
-        else if(dx < 0) {
+        else if (dx < 0) {
             sprite.setTextureRect(IntRect(40 * int(currentFrame) + 40, 244, -40, 50));
             lastAction = false;
         } 
         else {
-            if(lastAction) {
+            if (lastAction) {
                 sprite.setTextureRect(IntRect(43 * int(idleFrame) + 4, 188, 40, 50));
             } else {
                 sprite.setTextureRect(IntRect(43 * int(idleFrame) + 4 + 40, 188, -40, 50));
@@ -197,17 +227,7 @@ public:
 
         weapon.update(time);
         dx = 0;
-    }
-
-    void shoot(std::vector<Entity*>& bullets) {
-        Bullet* newBullet = new Bullet(
-            weapon.bulletTexture,
-            rect.left + (lastAction ? 40 : -10),
-            rect.top + 10, lastAction,
-            0.5f, 25);
-        bullets.push_back(static_cast<Entity*>(newBullet));
-    }
-    
+    };
 
     void Collision(int dir) {
         for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
@@ -226,10 +246,10 @@ public:
                     }
                 }
                 if (TileMap[i][j] == '0') TileMap[i][j] = ' ';
-        }
+            }
     }
 };
-//! Basic enemy class
+//! Basic enemy
 class Enemy : public Entity {
     public:
         int armor;
@@ -473,8 +493,12 @@ int main() {
                 entities.push_back(new Coin(basicAssets, j*32 + 8, i*32 + 8));
                 TileMap[i][j] = ' ';
             }
-            if (TileMap[i][j] == 'P') {
-                entities.push_back(new LeftRightPlatform(basicAssets, j * 32, i * 32, 100.0f, 0.05f));
+            if (TileMap[i][j] == 'L') {
+                entities.push_back(new MovingPlatform(basicAssets, j*32, i*32, 64, 16, 100.0f, 0.05f));
+                TileMap[i][j] = ' ';
+            }
+            if (TileMap[i][j] == 'U') {
+                entities.push_back(new VerticalMovingPlatform(basicAssets, j * 32, i * 32, 64, 16, 100.0f, 0.05f));
                 TileMap[i][j] = ' ';
             }
         }
@@ -547,8 +571,38 @@ int main() {
                     continue;
                 }
             }
-
             ++it;
+        }
+        for (auto* entity : entities) {
+            if (auto* platform = dynamic_cast<MovingPlatform*>(entity)) {
+                if (player.rect.intersects(platform->rect)) {
+                    float playerBottom = player.rect.top + player.rect.height;
+                    float platformTop = platform->rect.top;
+                    float deltaY = playerBottom - platformTop;
+
+
+                    if (deltaY > 0 && deltaY < 10) { 
+                        player.onGround = true;
+                        player.rect.top = platformTop - player.rect.height;
+                        player.dy = 0;
+                        player.rect.left += platform->dx * time;
+                    }
+                }
+            }
+            if (auto* platform = dynamic_cast<VerticalMovingPlatform*>(entity)) {
+                if (player.rect.intersects(platform->rect)) {
+                    float playerBottom = player.rect.top + player.rect.height;
+                    float platformTop = platform->rect.top;
+                    float deltaY = playerBottom - platformTop;
+
+                    if (deltaY > 0 && deltaY < 10) { 
+                        player.onGround = true;
+                        player.rect.top = platformTop - player.rect.height;
+                        player.dy = 0;
+                        player.rect.top += platform->dy * time;
+                    }
+                }
+            }
         }
         
 
@@ -568,7 +622,7 @@ int main() {
                 window.draw(rectangle);
             }
         }
-
+        
         for (auto& entity : entities) entity->draw(window);
         window.setView(uiView);
         window.draw(coinText);
