@@ -12,8 +12,8 @@ String TileMap[H] = {
     "B                                H          B",
     "B                                B          B",
     "B                 V                         B",
-    "B                           E               B",
-    "B         CCCC         BBBBBBBBBBB          B",
+    "B          C                K               B",
+    "B         BBBB         BBBBBBBBBBB          B",
     "B                                B          B",
     "BBB                              BI         B",
     "B       L      BB                BB         B",
@@ -42,6 +42,8 @@ class Entity {
             window.draw(sprite);
         }
 };
+std::vector<Entity*> entities; 
+Texture basicAssets;  
 //! ------------------------------------------- Stuct entity --------------------------------------------
 class Coin : public Entity {
     public:
@@ -611,7 +613,7 @@ class SpeedBerry : public Entity {
             sprite.setTextureRect(IntRect(36, 311, 10, 9));
         }
         void update(float time) override {}
-};
+}; 
 //! --------------------------------------------- Main function ---------------------------------------------
 int main() {
     View uiView;
