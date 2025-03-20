@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/26.0.9 Chrome/128.0.6613.186 Electron/32.2.5 Safari/537.36" version="26.0.9">
   <diagram name="Component Diagram" id="7_nNQgnhCJgLzw5vBVIe">
-    <mxGraphModel dx="1221" dy="725" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1018" dy="604" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -17,13 +17,10 @@
           <mxGeometry x="390" y="260" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="XFMWvun3uup3ezlOTIOH-98" value="Enemy" style="shape=component;" parent="1" vertex="1">
-          <mxGeometry x="440" y="390" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="XFMWvun3uup3ezlOTIOH-99" value="Chest" style="shape=component;" parent="1" vertex="1">
-          <mxGeometry x="20" y="500" width="120" height="60" as="geometry" />
+          <mxGeometry x="390" y="420" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="XFMWvun3uup3ezlOTIOH-100" value="TileMap" style="shape=component;" parent="1" vertex="1">
-          <mxGeometry x="220" y="500" width="120" height="60" as="geometry" />
+          <mxGeometry x="130" y="420" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="XFMWvun3uup3ezlOTIOH-101" value="SFML (External)" style="shape=component;fillColor=#ffe6cc;strokeColor=#d79b00;" parent="1" vertex="1">
           <mxGeometry x="620" y="200" width="140" height="60" as="geometry" />
@@ -37,9 +34,6 @@
               <mxPoint x="80" y="380" />
             </Array>
           </mxGeometry>
-        </mxCell>
-        <mxCell id="XFMWvun3uup3ezlOTIOH-104" style="edgeStyle=orthogonalEdgeStyle;curved=0;endArrow=block;endFill=0;dashed=0;" parent="1" source="XFMWvun3uup3ezlOTIOH-99" target="XFMWvun3uup3ezlOTIOH-94" edge="1">
-          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="XFMWvun3uup3ezlOTIOH-105" style="edgeStyle=orthogonalEdgeStyle;curved=0;endArrow=diamondThin;endFill=1;startArrow=none;dashed=0;" parent="1" source="XFMWvun3uup3ezlOTIOH-95" target="XFMWvun3uup3ezlOTIOH-96" edge="1">
           <mxGeometry relative="1" as="geometry" />
