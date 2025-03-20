@@ -12,7 +12,7 @@ String TileMap[H] = {
     "B                                H          B",
     "B                                B          B",
     "B                 V                         B",
-    "B          C                K               B",
+    "B          C                                B",
     "B         BBBB         BBBBBBBBBBB          B",
     "B                                B          B",
     "BBB                              BI         B",
@@ -144,7 +144,7 @@ class Bullet : public Entity {
 
 class Weapon {
     public:
-        virtual ~Weapon() = default; // Important for polymorphism
+        virtual ~Weapon() = default;
         virtual bool tryFire(std::vector<Entity*>& bullets, float x, float y, bool direction) = 0;
         virtual void update(float time) = 0;
         virtual void setBulletTexture(Texture& texture) = 0;
