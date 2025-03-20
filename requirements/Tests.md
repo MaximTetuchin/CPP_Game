@@ -14,20 +14,20 @@ The testing plan will follow the structure of the system’s entities and classe
 - **Test Steps:**
     1. The player collects the invincibility ball.
     2. Check if the invincibility status is applied to the player.
-    3. Verify that the player is invincible for **10 seconds**.
+    3. Verify that the player is invincible for **5 seconds**.
     4. Ensure the invincibility ball disappears after being collected.
-- **Expected Outcome:** Player becomes invincible for 10 seconds; invincibility ball disappears.
+- **Expected Outcome:** Player becomes invincible for 5 seconds; invincibility ball disappears.
 
 #### **Test 2: Med Kit (Entity)**
 
-**Objective:** Verify that the med kit restores 1/3 of the player's health when collected.
+**Objective:** Verify that the med kit restores 35 hp of the player's health when collected.
 
 - **Precondition:** The player has less than full health.
 - **Test Steps:**
     1. The player collects the med kit.
-    2. Check if the player's health increases by 1/3.
+    2. Check if the player's health increases by 35.
     3. Ensure the med kit disappears after being collected.
-- **Expected Outcome:** Player's health increases by 1/3; med kit disappears.
+- **Expected Outcome:** Player's health increases by 35; med kit disappears.
 
 #### **Test 3: Speed Berry (Entity)**
 
@@ -36,26 +36,12 @@ The testing plan will follow the structure of the system’s entities and classe
 - **Precondition:** The player is not under the effect of a speed berry.
 - **Test Steps:**
     1. The player collects the speed berry.
-    2. Check if the player's speed increases by **35%**.
+    2. Check if the player's speed increases by **25%**.
     3. Ensure that the speed boost lasts for **10 seconds**.
     4. Ensure the speed berry disappears after being collected.
-- **Expected Outcome:** Player's speed increases by 35% for 10 seconds; speed berry disappears.
+- **Expected Outcome:** Player's speed increases by 25% for 10 seconds; speed berry disappears.
 
-#### **Test 4: Chest**
-
-**Objective:** Test if chests spawn and drop items correctly.
-
-- **Precondition:** A chest is present in the level.
-- **Test Steps:**
-    1. The player damages the chest with a weapon.
-    2. Verify that the chest opens and drops one of the following with a **1/3 chance**:
-        - Med Kit
-        - Invincibility Ball
-        - Speed Berry
-    3. Ensure the chest disappears after it drops the item.
-- **Expected Outcome:** Chest opens, and a random item (med kit, invincibility ball, or speed berry) is dropped; chest disappears.
-
-#### **Test 5: Moving Platform**
+#### **Test 4: Moving Platform**
 
 **Objective:** Verify the movement and stop behavior of the moving platform.
 
@@ -63,11 +49,10 @@ The testing plan will follow the structure of the system’s entities and classe
 - **Test Steps:**
     1. The player stands on the moving platform.
     2. Verify that the platform moves smoothly between its fixed points.
-    3. Ensure the platform stops for **1.5 seconds** at each extreme point.
-    4. Verify that the platform reverses direction after the stop.
-- **Expected Outcome:** Platform moves between two points and stops for 1.5 seconds; player moves with the platform.
+    3. Verify that the platform reverses direction after the stop.
+- **Expected Outcome:** Platform moves between two points; player moves with the platform.
 
-#### **Test 6: Coin**
+#### **Test 5: Coin**
 
 **Objective:** Verify that the coin behaves as expected when collected.
 
@@ -82,9 +67,9 @@ The testing plan will follow the structure of the system’s entities and classe
 
 ### **2. Enemy Class**
 
-#### **Test 7: Common Foe**
+#### **Test 6: Walking Enemy**
 
-**Objective:** Verify that the common enemy moves and behaves as expected.
+**Objective:** Verify that the walking enemy moves and behaves as expected.
 
 - **Precondition:** A common foe is present in the level.
 - **Test Steps:**
@@ -93,7 +78,7 @@ The testing plan will follow the structure of the system’s entities and classe
     3. Check that the enemy disappears when its health reaches 0.
 - **Expected Outcome:** Enemy moves left-right, reverses direction at walls, and disappears upon death.
 
-#### **Test 8: Flying Foe**
+#### **Test 7: Flying Enemy**
 
 **Objective:** Verify that the flying enemy moves and behaves as expected.
 
@@ -103,7 +88,7 @@ The testing plan will follow the structure of the system’s entities and classe
     2. Ensure the enemy disappears when its health reaches 0.
 - **Expected Outcome:** Flying foe moves within its space and disappears upon death.
 
-#### **Test 9: Jumping Foe**
+#### **Test 8: Jumping Enemy**
 
 **Objective:** Verify that the jumping enemy moves and behaves as expected.
 
@@ -114,7 +99,7 @@ The testing plan will follow the structure of the system’s entities and classe
     3. Ensure the enemy disappears when its health reaches 0.
 - **Expected Outcome:** Jumping foe moves and randomly jumps, disappearing upon death.
 
-#### **Test 10: Armored Common Foe**
+#### **Test 9: Armored Walking Enemy**
 
 **Objective:** Test if the armored common foe behaves correctly with additional health.
 
@@ -125,7 +110,7 @@ The testing plan will follow the structure of the system’s entities and classe
     3. Ensure the enemy disappears when its health reaches 0.
 - **Expected Outcome:** Armored common foe moves and has increased health compared to the normal foe, disappearing upon death.
 
-#### **Test 11: Armored Flying Foe**
+#### **Test 10: Armored Flying Enemy**
 
 **Objective:** Test if the armored flying foe behaves correctly with additional health.
 
@@ -136,7 +121,7 @@ The testing plan will follow the structure of the system’s entities and classe
     3. Ensure the enemy disappears when its health reaches 0.
 - **Expected Outcome:** Armored flying foe moves within its space and has increased health compared to the normal flying foe, disappearing upon death.
 
-#### **Test 12: Armored Jumping Foe**
+#### **Test 11: Armored Jumping Enemy**
 
 **Objective:** Test if the armored jumping foe behaves correctly with additional health.
 
@@ -151,18 +136,18 @@ The testing plan will follow the structure of the system’s entities and classe
 
 ### **3. Weapon Class**
 
-#### **Test 13: Two-Bullets Weapon**
+#### **Test 12: Shotgun**
 
-**Objective:** Verify that the two-bullets weapon functions correctly.
+**Objective:** Verify that the shotgun functions correctly.
 
-- **Precondition:** The player selects the two-bullets weapon.
+- **Precondition:** The player selects the shotgun.
 - **Test Steps:**
     1. The player fires the weapon.
     2. Verify that two bullets are fired at once.
     3. Check that the bullet damage is appropriate for this weapon type.
 - **Expected Outcome:** Two bullets are fired at once, and the bullets deal the correct damage.
 
-#### **Test 14: Minigun**
+#### **Test 13: Minigun**
 
 **Objective:** Verify that the minigun functions correctly.
 
@@ -173,7 +158,7 @@ The testing plan will follow the structure of the system’s entities and classe
     3. Check that the bullets are fired at a rapid rate.
 - **Expected Outcome:** Minigun fires rapidly with low damage.
 
-#### **Test 15: Rifle**
+#### **Test 14: Rifle**
 
 **Objective:** Verify that the rifle functions correctly.
 
@@ -184,7 +169,7 @@ The testing plan will follow the structure of the system’s entities and classe
     3. Check that the bullet damage is appropriate for this weapon.
 - **Expected Outcome:** Rifle fires at a moderate rate and deals medium damage.
 
-#### **Test 16: Pistol**
+#### **Test 15: Pistol**
 
 **Objective:** Verify that the pistol functions correctly.
 
