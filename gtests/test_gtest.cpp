@@ -2,7 +2,7 @@
 CPP_Game
 */
 #include <gtest/gtest.h>
-#include "../source/simple_func.h"
+#include "simple_func.h"
 
 TEST(SFMLTest, CreateCircle) {
     CircleShape shape = createCircle(50.f, {10, 20}, Color::Red);
