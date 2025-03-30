@@ -1,42 +1,56 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Werror -Wpedantic -Wall
+CXXFLAGS = -Wall -Wextra -std=c++17 -I./source -I./gtests
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
-GTEST_LDFLAGS = -lgtest -lgtest_main -pthread
+GTEST_LDFLAGS = -lgtest -pthread
 
+BUILD_DIR = build
 SRC_DIR = source
 TEST_DIR = gtests
-BUILD_DIR = build
 
-SRC_FILES = $(SRC_DIR)/simple_pic.cpp
-SRC_OBJ = $(BUILD_DIR)/simple_pic.o
-TEST_FILES = $(TEST_DIR)/test_gtest.cpp
-TEST_OBJ = $(BUILD_DIR)/test_gtest.o
-SIMPLE_FUNC_OBJ = $(BUILD_DIR)/simple_func.o
+TARGET = CPP_Game
+TEST_TARGET = $(BUILD_DIR)/test_runner
 
-EXE = $(BUILD_DIR)/simple_pic
-TEST_EXE = $(BUILD_DIR)/test_gtest
+# Основной проект
+MAIN_SRC = main.cpp
+PROJECT_SRC = $(wildcard $(SRC_DIR)/*.cpp $(SRC_DIR)/**/*.cpp)
+PROJECT_OBJ = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/$(SRC_DIR)/%.o, $(PROJECT_SRC))
+MAIN_OBJ = $(BUILD_DIR)/$(MAIN_SRC:.cpp=.o)
 
-$(shell mkdir -p $(BUILD_DIR))
+# Тесты
+TEST_SRC = \
+    $(TEST_DIR)/test_gtest.cpp \
+    $(TEST_DIR)/simple_func.cpp
 
-all: $(EXE)
+TEST_OBJ = $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/$(TEST_DIR)/%.o, $(TEST_SRC))
 
-$(EXE): $(SRC_OBJ) $(SIMPLE_FUNC_OBJ)
-	$(CXX) $^ -o $@ $(LDFLAGS)
+.PHONY: all clean test prj
 
-$(BUILD_DIR)/simple_pic.o: $(SRC_DIR)/simple_pic.cpp $(SRC_DIR)/simple_func.h
+prj: $(TARGET)
+test: $(TEST_TARGET)
+	@echo "Running tests..."
+	./$(TEST_TARGET)
+
+$(TARGET): $(PROJECT_OBJ) $(MAIN_OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+
+$(TEST_TARGET): $(TEST_OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(GTEST_LDFLAGS)
+
+# Правила компиляции
+$(BUILD_DIR)/%.o: %.cpp | $(BUILD_DIR)
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(BUILD_DIR)/simple_func.o: $(SRC_DIR)/simple_func.cpp $(SRC_DIR)/simple_func.h
+$(BUILD_DIR)/$(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-test: $(TEST_EXE)
-	./$(TEST_EXE)
-
-$(TEST_EXE): $(TEST_OBJ) $(BUILD_DIR)/simple_func.o
-	$(CXX) $^ -o $@ $(LDFLAGS) $(GTEST_LDFLAGS)
-
-$(BUILD_DIR)/test_gtest.o: $(TEST_FILES)
+$(BUILD_DIR)/$(TEST_DIR)/%.o: $(TEST_DIR)/%.cpp | $(BUILD_DIR)
+	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
 clean:
-	rm -rf $(BUILD_DIR)/*
+	rm -rf $(BUILD_DIR) $(TARGET) $(TEST_TARGET)
