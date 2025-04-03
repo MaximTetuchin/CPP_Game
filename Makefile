@@ -10,13 +10,11 @@ TEST_DIR = gtests
 TARGET = CPP_Game
 TEST_TARGET = $(BUILD_DIR)/test_runner
 
-# Основной проект
 MAIN_SRC = main.cpp
 PROJECT_SRC = $(wildcard $(SRC_DIR)/*.cpp $(SRC_DIR)/**/*.cpp)
 PROJECT_OBJ = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/$(SRC_DIR)/%.o, $(PROJECT_SRC))
 MAIN_OBJ = $(BUILD_DIR)/$(MAIN_SRC:.cpp=.o)
 
-# Тесты
 TEST_SRC = \
     $(TEST_DIR)/test_gtest.cpp \
     $(TEST_DIR)/simple_func.cpp
@@ -36,7 +34,6 @@ $(TARGET): $(PROJECT_OBJ) $(MAIN_OBJ)
 $(TEST_TARGET): $(TEST_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(GTEST_LDFLAGS)
 
-# Правила компиляции
 $(BUILD_DIR)/%.o: %.cpp | $(BUILD_DIR)
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
