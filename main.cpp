@@ -31,7 +31,6 @@ sf::Texture basicAssets;
 sf::RectangleShape rectangle(sf::Vector2f(32, 32));
 
 
-//! --------------------------------------------- Main function ---------------------------------------------
 int main() {
     sf::Clock clock;
     sf::View uiView;

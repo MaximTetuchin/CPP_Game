@@ -14,7 +14,9 @@ Player::Player(sf::Texture& image, Weapon* startingWeapon)
       speedMultiplier(1.0f),
       speedBoostTime(0),
       isSpeedBoosted(false),
-      isInvincible(false) {}
+      isInvincible(false),
+      respawnX(7*32), // Инициализация точки респавна
+      respawnY(9*32) {}
 
 void Player::addCoins(int amount) {
     coins += amount;
@@ -25,6 +27,9 @@ void Player::takeDamage(int damage) {
         health -= damage;
         std::cout << "damage was taken!!!!!!!!!!!!!!!\n";
         if(health < 0) health = 0;
+        if (health == 0) {
+            respawn(); // Респавн при достижении 0 HP
+        }
         invincibilityTime = 1500.0f;
         isInvincible = true;
     }
@@ -103,4 +108,17 @@ void Player::Collision(int dir) {
             }
             if (TileMap[i][j] == '0') TileMap[i][j] = ' ';
         }
+}
+
+
+void Player::respawn() {
+    health = maxHealth;
+    rect.left = respawnX;
+    rect.top = respawnY;
+    sprite.setPosition(respawnX, respawnY);
+    dx = 0;
+    dy = 0;
+    speedMultiplier = 1.0f;
+    speedBoostTime = 0;
+    isSpeedBoosted = false;
 }

@@ -22,6 +22,9 @@ public:
     bool isSpeedBoosted;
     bool isInvincible;
 
+    float respawnX; // Добавлено: X координата респавна
+    float respawnY; // Добавлено: Y координата респавна
+
     Player(sf::Texture& image, Weapon* startingWeapon);
     
     void addCoins(int amount);
@@ -29,5 +32,6 @@ public:
     void switchWeapon(Weapon* newWeapon);
     void update(float time) override;
     void Collision(int dir);
+    void respawn(); // Добавлено: метод респавна
 };
 #endif
