@@ -52,13 +52,13 @@ int main() {
 
     sf::Text coinText,weaponText,hpText;
     hpText.setFont(font); hpText.setCharacterSize(24);
-    hpText.setFillColor(sf::Color::Black); hpText.setPosition(10, 80);
+    hpText.setFillColor(sf::Color::Red); hpText.setPosition(10, 80);
 
     coinText.setFont(font); coinText.setCharacterSize(24);
-    coinText.setFillColor(sf::Color::Black); coinText.setPosition(10, 45);
+    coinText.setFillColor(sf::Color::Red); coinText.setPosition(10, 45);
 
     weaponText.setFont(font); weaponText.setCharacterSize(24); 
-    weaponText.setFillColor(sf::Color::Black); weaponText.setPosition(10, 10);
+    weaponText.setFillColor(sf::Color::Red); weaponText.setPosition(10, 10);
 
     // Loading basic assets
     sf::Texture playerTex, bulletTex,basicAssets;
@@ -316,6 +316,7 @@ int main() {
             player.rect.left + player.rect.width / 2,
             player.rect.top + player.rect.height / 2 - CAMERA_Y_OFFSET
         );
+        
         window.setView(camera);
         hpText.setString("HP: " + std::to_string(player.health) + "/" + std::to_string(player.maxHealth));
         coinText.setString("Coins: " + std::to_string(player.coins));

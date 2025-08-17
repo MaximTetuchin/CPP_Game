@@ -5,4 +5,4 @@ SpeedBerry::SpeedBerry(sf::Texture& image, float x, float y)
     sprite.setTextureRect(sf::IntRect(36, 311, 10, 9));
 }
 
-void SpeedBerry::update(float time) {}
+void SpeedBerry::update(float) {}

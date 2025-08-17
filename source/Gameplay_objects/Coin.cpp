@@ -5,4 +5,4 @@ Coin::Coin(sf::Texture &image, float x, float y)
     sprite.setTextureRect(sf::IntRect(4, 1348, 7, 8)); 
 }
 
-void Coin::update(float time) {}
+void Coin::update(float) {}

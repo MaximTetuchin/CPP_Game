@@ -1,7 +1,7 @@
 #include "Tilemap.h"
 
 sf::String TileMap[H] = {
-    "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+    "B                                                          B"
     "B                                                          B"
     "B                                                          B"
     "B                                                          B",

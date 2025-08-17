@@ -5,4 +5,4 @@ InvincibilitySphere::InvincibilitySphere(sf::Texture& image, float x, float y)
     sprite.setTextureRect(sf::IntRect(5, 902, 5, 5));
 }
 
-void InvincibilitySphere::update(float time) {}
+void InvincibilitySphere::update(float) {}
