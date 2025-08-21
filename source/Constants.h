@@ -30,7 +30,7 @@ constexpr int TILE_SIZE = 32;
 constexpr float CAMERA_Y_OFFSET = 70.0f;
 
 // Tilemap symbols
-constexpr char TILE_SOLID = 'B';
+constexpr char TILE_GRASS = 'B';
 constexpr char TILE_EMPTY = ' ';
 
 #endif // CONSTANTS_H

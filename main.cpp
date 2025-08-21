@@ -66,6 +66,13 @@ int main() {
     basicAssets.loadFromFile("assets/World-Tiles.png");
     playerTex.loadFromFile("assets/fang.png");
     bulletTex.loadFromFile("assets/fang.png");
+    
+    // Loading tile texture
+    sf::Sprite tileSprite;
+    tileSprite.setTexture(basicAssets);
+    tileSprite.setTextureRect(sf::IntRect(80, 417, 32, 32));
+    tileSprite.setOrigin(0, 0);
+
     // Walking enemy init
     sf::Texture WalkingEnemyTex,ArmoredWalkingEnemyTex;
     WalkingEnemyTex.loadFromFile("assets/edited_assets/walkingEnemy.png");
@@ -322,15 +329,18 @@ int main() {
         coinText.setString("Coins: " + std::to_string(player.coins));
         window.clear(sf::Color::White);
     
+        // Drawing tiles with texture
         for (int i = 0; i < H; i++) {
             for (int j = 0; j < W; j++) {
-                if (TileMap[i][j] == TILE_SOLID) rectangle.setFillColor(sf::Color::Black);
-                if (TileMap[i][j] == TILE_EMPTY) continue;
-                rectangle.setPosition(j * TILE_SIZE, i * TILE_SIZE);
-                window.draw(rectangle);
+                if (TileMap[i][j] == TILE_GRASS) {
+                    sf::Sprite tileSprite(basicAssets);
+                    tileSprite.setTextureRect(sf::IntRect(80, 417, 32, 32));
+                    tileSprite.setPosition(j * 32, i * 32);
+                    tileSprite.setOrigin(0, 0);
+                    window.draw(tileSprite);
+                }
             }
         }
-    
         for (auto& entity : entities) entity->draw(window);
         window.setView(uiView);
         window.draw(coinText);
