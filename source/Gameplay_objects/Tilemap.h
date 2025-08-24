@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 
-const int H = 18; // Map height
+const int H = 25; // Map height
 const int W = 60; // Map width
 
 

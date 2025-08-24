@@ -44,6 +44,17 @@ int main() {
     camera.setCenter(400, 300);
     window.setView(camera);
 
+    // Загрузка текстуры фона
+    sf::Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("assets/background.jpg")) {
+        return EXIT_FAILURE;
+    }
+    sf::Sprite backgroundSprite(backgroundTexture);
+    backgroundTexture.setRepeated(true);
+    backgroundTexture.setRepeated(true);
+    backgroundSprite.setTextureRect(sf::IntRect(0, 0, W * 32, H * 32));
+    backgroundSprite.setPosition(0, -250);
+
     //loading fonts
     sf::Font font;
     if (!font.loadFromFile("assets/arial.ttf")) {
@@ -66,7 +77,7 @@ int main() {
     basicAssets.loadFromFile("assets/World-Tiles.png");
     playerTex.loadFromFile("assets/fang.png");
     bulletTex.loadFromFile("assets/fang.png");
-    
+
     // Loading tile texture
     sf::Sprite tileSprite;
     tileSprite.setTexture(basicAssets);
@@ -90,8 +101,8 @@ int main() {
     pistol.setBulletTexture(bulletTex); minigun.setBulletTexture(bulletTex);
     shotgun.setBulletTexture(bulletTex); rifle.setBulletTexture(bulletTex);
 
-    // Basics init
     Player player(playerTex, &pistol);
+    player.setPosition(400, 128);
     entities.push_back(&player);
     weaponText.setString("Weapon: " + player.currentWeapon->getName());
 
@@ -319,24 +330,39 @@ int main() {
         }
     
         // Drawing text and tiles
-        camera.setCenter(
-            player.rect.left + player.rect.width / 2,
-            player.rect.top + player.rect.height / 2 - CAMERA_Y_OFFSET
-        );
+        float camX = player.rect.left + player.rect.width / 2;
+        float camY = player.rect.top + player.rect.height / 2 - CAMERA_Y_OFFSET;
+
+        // Ограничения камеры
+        if (camX < window.getSize().x / 2) camX = window.getSize().x / 2;
+        if (camY < window.getSize().y / 2) camY = window.getSize().y / 2;
+        if (camX > W * 32 - window.getSize().x / 2) camX = W * 32 - window.getSize().x / 2;
+        if (camY > H * 32 - window.getSize().y / 2) camY = H * 32 - window.getSize().y / 2;
+
+        camera.setCenter(camX, camY-32);
         
         window.setView(camera);
         hpText.setString("HP: " + std::to_string(player.health) + "/" + std::to_string(player.maxHealth));
         coinText.setString("Coins: " + std::to_string(player.coins));
         window.clear(sf::Color::White);
     
+        // Отрисовка фона
+        window.draw(backgroundSprite);
+    
         // Drawing tiles with texture
         for (int i = 0; i < H; i++) {
             for (int j = 0; j < W; j++) {
                 if (TileMap[i][j] == TILE_GRASS) {
                     sf::Sprite tileSprite(basicAssets);
-                    tileSprite.setTextureRect(sf::IntRect(80, 417, 32, 32));
+                    tileSprite.setTextureRect(sf::IntRect(1, 417, 32, 32));
                     tileSprite.setPosition(j * 32, i * 32);
                     tileSprite.setOrigin(0, 0);
+                    window.draw(tileSprite);
+                }
+                else if (TileMap[i][j] == TILE_GROUND) {
+                    sf::Sprite tileSprite(basicAssets);
+                    tileSprite.setTextureRect(sf::IntRect(2, 428, 32, 32));
+                    tileSprite.setPosition(j * 32, i * 32);
                     window.draw(tileSprite);
                 }
             }

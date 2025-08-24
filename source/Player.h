@@ -1,5 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
+
 #include "Entity.h"
 #include "Weapons/Weapon.h"
 #include <SFML/Graphics.hpp>
@@ -22,8 +23,8 @@ public:
     bool isSpeedBoosted;
     bool isInvincible;
 
-    float respawnX; // Добавлено: X координата респавна
-    float respawnY; // Добавлено: Y координата респавна
+    float respawnX;
+    float respawnY;
 
     Player(sf::Texture& image, Weapon* startingWeapon);
     
@@ -32,6 +33,9 @@ public:
     void switchWeapon(Weapon* newWeapon);
     void update(float time) override;
     void Collision(int dir);
-    void respawn(); // Добавлено: метод респавна
+    void respawn();
+    void setRespawnPoint(float x, float y); 
+    void setPosition(float x, float y); 
 };
+
 #endif

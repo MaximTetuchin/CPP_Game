@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Gameplay_objects/Tilemap.h"
+#include "Constants.h" // Предполагаем, что у вас есть файл с константами
 
 Player::Player(sf::Texture& image, Weapon* startingWeapon)
     : Entity(image, 7*32, 9*32, 40, 50),
@@ -15,8 +16,12 @@ Player::Player(sf::Texture& image, Weapon* startingWeapon)
       speedBoostTime(0),
       isSpeedBoosted(false),
       isInvincible(false),
-      respawnX(7*32), // Инициализация точки респавна
-      respawnY(9*32) {}
+      respawnX(7*32),
+      respawnY(9*32) {
+    
+    // Убедимся, что спрайт находится в правильной позиции
+    sprite.setPosition(rect.left, rect.top);
+}
 
 void Player::addCoins(int amount) {
     coins += amount;
@@ -84,6 +89,9 @@ void Player::update(float time) {
         }
     }
 
+    // Обновляем позицию спрайта
+    sprite.setPosition(rect.left, rect.top);
+
     if (currentWeapon) {
         currentWeapon->update(time);
     }
@@ -91,9 +99,15 @@ void Player::update(float time) {
 }
 
 void Player::Collision(int dir) {
-    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++)
+    for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++) {
+        // Добавляем проверку границ массива
+        if (i < 0 || i >= H) continue;
+        
         for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++) {
-            if (TileMap[i][j] == 'B') {
+            // Добавляем проверку границ массива
+            if (j < 0 || j >= W) continue;
+            
+            if (TileMap[i][j] == 'B' || TileMap[i][j] == 'G' || TileMap[i][j] == 'W') {
                 if ((dx > 0) && (dir == 0)) rect.left = j * 32 - rect.width;
                 if ((dx < 0) && (dir == 0)) rect.left = j * 32 + 32;
                 if ((dy > 0) && (dir == 1)) { 
@@ -108,8 +122,8 @@ void Player::Collision(int dir) {
             }
             if (TileMap[i][j] == '0') TileMap[i][j] = ' ';
         }
+    }
 }
-
 
 void Player::respawn() {
     health = maxHealth;
@@ -121,4 +135,26 @@ void Player::respawn() {
     speedMultiplier = 1.0f;
     speedBoostTime = 0;
     isSpeedBoosted = false;
+    isInvincible = true;
+    invincibilityTime = 1500.0f;
+}
+
+void Player::setRespawnPoint(float x, float y) {
+    respawnX = x;
+    respawnY = y;
+}
+
+void Player::setPosition(float x, float y) {
+    rect.left = x;
+    rect.top = y;
+    sprite.setPosition(x, y);
+    
+    dx = 0;
+    dy = 0;
+    onGround = false;
+    
+    Collision(0);
+    Collision(1); 
+    
+    sprite.setPosition(rect.left, rect.top);
 }
