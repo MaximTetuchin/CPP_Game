@@ -60,7 +60,6 @@ int main() {
     if (!font.loadFromFile("assets/arial.ttf")) {
         return EXIT_FAILURE;
     }
-
     sf::Text coinText,weaponText,hpText;
     hpText.setFont(font); hpText.setCharacterSize(24);
     hpText.setFillColor(sf::Color::Red); hpText.setPosition(10, 80);
@@ -102,7 +101,7 @@ int main() {
     shotgun.setBulletTexture(bulletTex); rifle.setBulletTexture(bulletTex);
 
     Player player(playerTex, &pistol);
-    player.setPosition(400, 128);
+    player.setPosition(150, 300);
     entities.push_back(&player);
     weaponText.setString("Weapon: " + player.currentWeapon->getName());
 
@@ -356,7 +355,6 @@ int main() {
                     sf::Sprite tileSprite(basicAssets);
                     tileSprite.setTextureRect(sf::IntRect(1, 417, 32, 32));
                     tileSprite.setPosition(j * 32, i * 32);
-                    tileSprite.setOrigin(0, 0);
                     window.draw(tileSprite);
                 }
                 else if (TileMap[i][j] == TILE_GROUND) {
@@ -378,5 +376,6 @@ int main() {
     for (auto& entity : entities) {
         if (entity != &player) delete entity;
     }
+
     return 0;
 }

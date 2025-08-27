@@ -107,7 +107,11 @@ void Player::Collision(int dir) {
             // Добавляем проверку границ массива
             if (j < 0 || j >= W) continue;
             
-            if (TileMap[i][j] == 'B' || TileMap[i][j] == 'G' || TileMap[i][j] == 'W') {
+            if (TileMap[i][j] == 'B' || TileMap[i][j] == 'G' || TileMap[i][j] == 'W' || TileMap[i][j] == 'Z') {
+                if (TileMap[i][j] == 'Z') {
+                    health = 100;
+                    respawn();
+                }
                 if ((dx > 0) && (dir == 0)) rect.left = j * 32 - rect.width;
                 if ((dx < 0) && (dir == 0)) rect.left = j * 32 + 32;
                 if ((dy > 0) && (dir == 1)) { 
