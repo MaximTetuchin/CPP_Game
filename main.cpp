@@ -1,10 +1,10 @@
 #include "source/Constants.h"
-
 #include "source/Gameplay_objects/Tilemap.h"
 #include "source/Entity.h"
 #include "source/Gameplay_objects/Coin.h"
 #include "source/Gameplay_objects/MovingPlatform.h"
 #include "source/Gameplay_objects/VerticalMovingPlatform.h"
+#include "source/Gameplay_objects/WinBlock.h"
 #include "source/Weapons/Bullet.h"
 #include "source/Weapons/Pistol.h"
 #include "source/Weapons/Weapon.h"
@@ -110,15 +110,15 @@ int main() {
         for (int j = 0; j < W; j++) {
             //^ Defaulf enemies 
             if (TileMap[i][j] == 'E') {
-                entities.push_back(new WalkingEnemy(WalkingEnemyTex, j*32, i*32, 34, 45, 0.05f, 100.0f));
+                entities.push_back(new WalkingEnemy(WalkingEnemyTex, j*32, i*32, 34, 45, 0.060f, 100.0f));
                 TileMap[i][j] = ' ';
             }
             if (TileMap[i][j] == 'F') {
-                entities.push_back(new FlyingEnemy(FlyingEnemyTex, j * 32, i * 32, 42, 42, 0.05f, 100.0f));
+                entities.push_back(new FlyingEnemy(FlyingEnemyTex, j * 32, i * 32, 42, 42, 0.055f, 100.0f));
                 TileMap[i][j] = ' ';
             }
             if (TileMap[i][j] == 'J') {
-                entities.push_back(new JumpingEnemy(JumpingEnemyTex, j*32, i*32, 39, 45, 0.05f, 100.0f, 0.3f));
+                entities.push_back(new JumpingEnemy(JumpingEnemyTex, j*32, i*32, 39, 45, 0.065f, 100.0f, 0.3f));
                 TileMap[i][j] = ' ';
             }     
             //^ Armored enemies 
@@ -157,6 +157,10 @@ int main() {
             }
             if (TileMap[i][j] == 'S') {
                 entities.push_back(new SpeedBerry(basicAssets, j*32, i*32));
+                TileMap[i][j] = ' ';
+            }
+            if (TileMap[i][j] == 'Q') {
+                entities.push_back(new WinBlock(basicAssets, j*32, i*32));
                 TileMap[i][j] = ' ';
             }
         }
@@ -292,6 +296,27 @@ int main() {
                     delete speedBerry;
                     it = entities.erase(it);
                     continue;
+                }
+            }
+
+            // WinBlock collision check
+            if (auto* winBlock = dynamic_cast<WinBlock*>(entity)) {
+                if (player.rect.intersects(winBlock->rect)) {
+                    // Создаем текст победы
+                    sf::Text winText;
+                    winText.setFont(font);
+                    winText.setString("You won!");
+                    winText.setCharacterSize(50);
+                    winText.setFillColor(sf::Color::Green);
+                    
+                    winText.setPosition(camera.getCenter().x - 100, camera.getCenter().y - 50);
+                    
+                    window.setView(camera);
+                    window.draw(winText);
+                    window.display();
+                    
+                    sf::sleep(sf::seconds(3));
+                    window.close();
                 }
             }
             
