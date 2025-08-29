@@ -108,7 +108,7 @@ int main() {
     // Creating entities before starting the game
     for (int i = 0; i < H; i++) {
         for (int j = 0; j < W; j++) {
-            //^ Defaulf enemies 
+            // Defaulf enemies 
             if (TileMap[i][j] == 'E') {
                 entities.push_back(new WalkingEnemy(WalkingEnemyTex, j*32, i*32, 34, 45, 0.060f, 100.0f));
                 TileMap[i][j] = ' ';
@@ -121,7 +121,7 @@ int main() {
                 entities.push_back(new JumpingEnemy(JumpingEnemyTex, j*32, i*32, 39, 45, 0.065f, 100.0f, 0.3f));
                 TileMap[i][j] = ' ';
             }     
-            //^ Armored enemies 
+            // Armored enemies 
             if (TileMap[i][j] == 'D') {
                 entities.push_back(new ArmoredWalkingEnemy(ArmoredWalkingEnemyTex, j*32, i*32, 34, 45, 0.05f, 100.0f));
                 TileMap[i][j] = ' ';
@@ -134,7 +134,7 @@ int main() {
                 entities.push_back(new ArmoredJumpingEnemy(ArmoredJumpingTex, j*32, i*32, 39, 45, 0.05f, 100.0f, 0.3f));
                 TileMap[i][j] = ' ';
             }  
-            //^ game entity 
+            // game entity 
             if (TileMap[i][j] == 'C') {
                 entities.push_back(new Coin(basicAssets, j*32 + 8, i*32 + 8));
                 TileMap[i][j] = ' ';
