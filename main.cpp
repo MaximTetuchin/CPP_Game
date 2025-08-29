@@ -302,10 +302,9 @@ int main() {
             // WinBlock collision check
             if (auto* winBlock = dynamic_cast<WinBlock*>(entity)) {
                 if (player.rect.intersects(winBlock->rect)) {
-                    // Создаем текст победы
                     sf::Text winText;
                     winText.setFont(font);
-                    winText.setString("You won!");
+                    winText.setString("You win!");
                     winText.setCharacterSize(50);
                     winText.setFillColor(sf::Color::Green);
                     
