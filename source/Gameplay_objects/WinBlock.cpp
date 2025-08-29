@@ -5,4 +5,4 @@ WinBlock::WinBlock(sf::Texture& image, float x, float y)
     sprite.setTextureRect(sf::IntRect(112, 208, 32, 32));
 }
 
-void WinBlock::update(float time) {}
+void WinBlock::update(float) {}

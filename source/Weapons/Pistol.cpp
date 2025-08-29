@@ -1,5 +1,5 @@
 #include "Pistol.h"
-#include "Bullet.h" // Если Bullet — ваш класс пули
+#include "Bullet.h"
 
 Pistol::Pistol(float delay, int dmg)
     : fireDelay(delay), currentDelay(0), damage(dmg) {}

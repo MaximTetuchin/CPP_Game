@@ -44,7 +44,7 @@ int main() {
     camera.setCenter(400, 300);
     window.setView(camera);
 
-    // Загрузка текстуры фона
+    // Background loading
     sf::Texture backgroundTexture;
     if (!backgroundTexture.loadFromFile("assets/background.jpg")) {
         return EXIT_FAILURE;
@@ -357,7 +357,7 @@ int main() {
         float camX = player.rect.left + player.rect.width / 2;
         float camY = player.rect.top + player.rect.height / 2 - CAMERA_Y_OFFSET;
 
-        // Ограничения камеры
+        // Camera limitations
         if (camX < window.getSize().x / 2) camX = window.getSize().x / 2;
         if (camY < window.getSize().y / 2) camY = window.getSize().y / 2;
         if (camX > W * 32 - window.getSize().x / 2) camX = W * 32 - window.getSize().x / 2;
@@ -369,8 +369,7 @@ int main() {
         hpText.setString("HP: " + std::to_string(player.health) + "/" + std::to_string(player.maxHealth));
         coinText.setString("Coins: " + std::to_string(player.coins));
         window.clear(sf::Color::White);
-    
-        // Отрисовка фона
+
         window.draw(backgroundSprite);
     
         // Drawing tiles with texture
