@@ -19,7 +19,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt update
-        sudo apt install -y libsfml-dev libgtest-dev cmake
+        sudo apt install -y libsfml-dev libgtest-dev cmake xvfb build-essential
         cd /usr/src/gtest
         sudo cmake .
         sudo make
@@ -30,6 +30,8 @@ jobs:
         make clean
         make
 
-    - name: Run tests
+    - name: Run tests headless
       run: |
+        Xvfb :99 -screen 0 1024x768x24 &
+        export DISPLAY=:99
         make test
