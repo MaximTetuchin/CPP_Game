@@ -22,14 +22,8 @@
 #include "../source/Gameplay_objects/MovingPlatform.h"
 #include "../source/Gameplay_objects/VerticalMovingPlatform.h"
 
-// DummyTexture для headless тестов
-class DummyTexture : public sf::Texture {
-public:
-    DummyTexture() { this->create(1,1); }
-};
-
 TEST(PlayerTest, TakeDamageReducesHealth) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Pistol pistol;
     Player player(texture, &pistol);
     player.health = 100;
@@ -39,7 +33,7 @@ TEST(PlayerTest, TakeDamageReducesHealth) {
 }
 
 TEST(PlayerTest, InvincibilityPreventsDamage) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Pistol pistol;
     Player player(texture, &pistol);
     player.health = 100;
@@ -50,7 +44,7 @@ TEST(PlayerTest, InvincibilityPreventsDamage) {
 }
 
 TEST(PlayerTest, AddCoinsIncreasesCoinCount) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Pistol pistol;
     Player player(texture, &pistol);
     player.coins = 10;
@@ -60,7 +54,7 @@ TEST(PlayerTest, AddCoinsIncreasesCoinCount) {
 }
 
 TEST(PlayerTest, SwitchWeaponChangesCurrentWeapon) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Pistol pistol;
     Minigun minigun;
     Player player(texture, &pistol);
@@ -70,7 +64,7 @@ TEST(PlayerTest, SwitchWeaponChangesCurrentWeapon) {
 }
 
 TEST(PlayerTest, UpdateDecreasesInvincibilityTime) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Pistol pistol;
     Player player(texture, &pistol);
     player.isInvincible = true;
@@ -81,7 +75,7 @@ TEST(PlayerTest, UpdateDecreasesInvincibilityTime) {
 }
 
 TEST(PlayerTest, UpdateDecreasesSpeedBoostTime) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Pistol pistol;
     Player player(texture, &pistol);
     player.isSpeedBoosted = true;
@@ -92,35 +86,35 @@ TEST(PlayerTest, UpdateDecreasesSpeedBoostTime) {
 }
 
 TEST(WeaponTest, PistolHasCorrectName) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Pistol pistol;
     pistol.setBulletTexture(texture);
     EXPECT_EQ(pistol.getName(), "Pistol");
 }
 
 TEST(WeaponTest, MinigunHasCorrectName) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Minigun minigun;
     minigun.setBulletTexture(texture);
     EXPECT_EQ(minigun.getName(), "Minigun");
 }
 
 TEST(WeaponTest, ShotgunHasCorrectName) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Shotgun shotgun;
     shotgun.setBulletTexture(texture);
     EXPECT_EQ(shotgun.getName(), "Shotgun");
 }
 
 TEST(WeaponTest, RifleHasCorrectName) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Rifle rifle;
     rifle.setBulletTexture(texture);
     EXPECT_EQ(rifle.getName(), "Rifle");
 }
 
 TEST(EnemyTest, WalkingEnemyTakesDamage) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     WalkingEnemy enemy(texture, 0, 0, 32, 32, 0.1f, 100.0f);
     enemy.health = 100;
     enemy.takeDamage(30);
@@ -128,7 +122,7 @@ TEST(EnemyTest, WalkingEnemyTakesDamage) {
 }
 
 TEST(EnemyTest, FlyingEnemyTakesDamage) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     FlyingEnemy enemy(texture, 0, 0, 32, 32, 0.1f, 100.0f);
     enemy.health = 100;
     enemy.takeDamage(30);
@@ -136,7 +130,7 @@ TEST(EnemyTest, FlyingEnemyTakesDamage) {
 }
 
 TEST(EnemyTest, JumpingEnemyTakesDamage) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     JumpingEnemy enemy(texture, 0, 0, 32, 32, 0.1f, 100.0f, 0.3f);
     enemy.health = 100;
     enemy.takeDamage(30);
@@ -144,7 +138,7 @@ TEST(EnemyTest, JumpingEnemyTakesDamage) {
 }
 
 TEST(EnemyTest, ArmoredWalkingEnemyTakesReducedDamage) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     ArmoredWalkingEnemy enemy(texture, 0, 0, 32, 32, 0.1f, 100.0f);
     enemy.health = 100;
     enemy.takeDamage(30);
@@ -152,7 +146,7 @@ TEST(EnemyTest, ArmoredWalkingEnemyTakesReducedDamage) {
 }
 
 TEST(EnemyTest, ArmoredFlyingEnemyTakesReducedDamage) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     ArmoredFlyingEnemy enemy(texture, 0, 0, 32, 32, 0.1f, 100.0f);
     enemy.health = 100;
     enemy.takeDamage(30);
@@ -160,7 +154,7 @@ TEST(EnemyTest, ArmoredFlyingEnemyTakesReducedDamage) {
 }
 
 TEST(EnemyTest, ArmoredJumpingEnemyTakesReducedDamage) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     ArmoredJumpingEnemy enemy(texture, 0, 0, 32, 32, 0.1f, 100.0f, 0.3f);
     enemy.health = 100;
     enemy.takeDamage(30);
@@ -168,7 +162,7 @@ TEST(EnemyTest, ArmoredJumpingEnemyTakesReducedDamage) {
 }
 
 TEST(EnemyTest, EnemyDiesWhenHealthReachesZero) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     WalkingEnemy enemy(texture, 0, 0, 32, 32, 0.1f, 100.0f);
     enemy.health = 10;
     enemy.takeDamage(10);
@@ -176,13 +170,13 @@ TEST(EnemyTest, EnemyDiesWhenHealthReachesZero) {
 }
 
 TEST(GameObjectTest, CoinCanBeCreated) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Coin coin(texture, 0, 0);
     EXPECT_TRUE(true);
 }
 
 TEST(GameObjectTest, PlayerHealsWithMedKit) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Pistol pistol;
     Player player(texture, &pistol);
 
@@ -201,7 +195,7 @@ TEST(GameObjectTest, PlayerHealsWithMedKit) {
 }
 
 TEST(GameObjectTest, InvincibilitySphereCanBeCollected) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Pistol pistol;
     Player player(texture, &pistol);
 
@@ -213,7 +207,7 @@ TEST(GameObjectTest, InvincibilitySphereCanBeCollected) {
 }
 
 TEST(GameObjectTest, SpeedBerryCanBeCollected) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Pistol pistol;
     Player player(texture, &pistol);
 
@@ -225,7 +219,7 @@ TEST(GameObjectTest, SpeedBerryCanBeCollected) {
 }
 
 TEST(GameObjectTest, WinBlockCanBeTouched) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Pistol pistol;
     Player player(texture, &pistol);
 
@@ -237,19 +231,19 @@ TEST(GameObjectTest, WinBlockCanBeTouched) {
 }
 
 TEST(PlatformTest, MovingPlatformCanBeCreated) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     MovingPlatform platform(texture, 0, 0, 64, 16, 100.0f, 0.05f);
     EXPECT_TRUE(true);
 }
 
 TEST(PlatformTest, VerticalMovingPlatformCanBeCreated) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     VerticalMovingPlatform platform(texture, 0, 0, 64, 16, 100.0f, 0.05f);
     EXPECT_TRUE(true);
 }
 
 TEST(EntityTest, EntityUpdateCompletesWithoutErrors) {
-    DummyTexture texture;
+    sf::Texture texture; texture.create(1,1);
     Pistol pistol;
     Player player(texture, &pistol);
     
@@ -259,8 +253,8 @@ TEST(EntityTest, EntityUpdateCompletesWithoutErrors) {
     EXPECT_TRUE(true);
 }
 
-// Main остаётся как у тебя
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
+    sf::Context context;
     return RUN_ALL_TESTS();
 }
