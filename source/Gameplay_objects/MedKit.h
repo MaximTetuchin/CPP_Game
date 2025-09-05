@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #ifndef MED_KIT_H
 #define MED_KIT_H
 #include "../Entity.h"

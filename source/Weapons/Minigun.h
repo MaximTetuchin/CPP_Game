@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #ifndef MINIGUN_H
 #define MINIGUN_H
 #include "Weapon.h"

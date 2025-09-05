@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #ifndef SHOTGUN_H
 #define SHOTHUN_H
 

@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #ifndef VERTICAL_MOVING_PLATFORM
 #define VERTICAL_MOVING_PLATFORM
 #include "../Entity.h"

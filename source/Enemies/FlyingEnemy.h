@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #ifndef FLYING_ENEMY_H
 #define FLYING_ENEMY_H
 #include "Enemy.h"

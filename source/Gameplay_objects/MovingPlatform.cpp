@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #include "MovingPlatform.h"
 
 MovingPlatform::MovingPlatform(sf::Texture &image, float x, float y, float w, float h, float range, float spd)

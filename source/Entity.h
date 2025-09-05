@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #ifndef ENTITY_CLASS_H
 #define ENTITY_CLASS_H
 #include <SFML/Graphics.hpp>

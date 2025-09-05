@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #include "WinBlock.h"
 
 WinBlock::WinBlock(sf::Texture& image, float x, float y) 

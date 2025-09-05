@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #include "Coin.h"
 
 Coin::Coin(sf::Texture &image, float x, float y) 
