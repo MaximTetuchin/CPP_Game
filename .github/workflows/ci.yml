@@ -1,35 +1,37 @@
-name: C++ SFML Platformer CI
+name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Install dependencies
       run: |
-        sudo apt update
-        sudo apt install -y libsfml-dev libgtest-dev cmake xvfb build-essential
+        sudo apt-get update
+        sudo apt-get install -y xvfb libsfml-dev libgtest-dev
+
+    - name: Build Google Test
+      run: |
         cd /usr/src/gtest
-        sudo cmake .
+        sudo cmake CMakeLists.txt
         sudo make
         sudo cp lib/*.a /usr/lib
 
-    - name: Build the project
-      run: |
-        make clean
-        make
+    - name: Build project
+      run: make
 
-    - name: Run tests headless
+    - name: Run tests
       run: |
-        xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" ./build/test_runner
+        # Устанавливаем виртуальный дисплей для тестов
+        export DISPLAY=:99
+        Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+        make test
