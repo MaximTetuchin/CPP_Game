@@ -47,6 +47,5 @@ A 2D platformer built with SFML, featuring smooth controls, obstacles, and enemi
 #include <SFML/System.hpp>    // Core system functionality
 ```
 ```
-sudo apt-get update
-sudo apt-get install libsfml-dev
+sudo apt-get update && sudo apt-get install -y xvfb libsfml-dev libgtest-dev
 ```
