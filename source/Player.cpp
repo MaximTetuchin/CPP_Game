@@ -1,6 +1,10 @@
+
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #include "Player.h"
 #include "Gameplay_objects/Tilemap.h"
-#include "Constants.h" // Предполагаем, что у вас есть файл с константами
+#include "Constants.h" 
 
 Player::Player(sf::Texture& image, Weapon* startingWeapon)
     : Entity(image, 7*32, 9*32, 40, 50),
@@ -18,8 +22,6 @@ Player::Player(sf::Texture& image, Weapon* startingWeapon)
       isInvincible(false),
       respawnX(7*32),
       respawnY(9*32) {
-    
-    // Убедимся, что спрайт находится в правильной позиции
     sprite.setPosition(rect.left, rect.top);
 }
 
@@ -33,7 +35,7 @@ void Player::takeDamage(int damage) {
         std::cout << "damage was taken!!!!!!!!!!!!!!!\n";
         if(health < 0) health = 0;
         if (health == 0) {
-            respawn(); // Респавн при достижении 0 HP
+            respawn();
         }
         invincibilityTime = 1500.0f;
         isInvincible = true;
@@ -89,7 +91,6 @@ void Player::update(float time) {
         }
     }
 
-    // Обновляем позицию спрайта
     sprite.setPosition(rect.left, rect.top);
 
     if (currentWeapon) {
@@ -100,11 +101,9 @@ void Player::update(float time) {
 
 void Player::Collision(int dir) {
     for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++) {
-        // Добавляем проверку границ массива
         if (i < 0 || i >= H) continue;
         
         for (int j = rect.left / 32; j < (rect.left + rect.width) / 32; j++) {
-            // Добавляем проверку границ массива
             if (j < 0 || j >= W) continue;
             
             if (TileMap[i][j] == 'B' || TileMap[i][j] == 'G' || TileMap[i][j] == 'W' || TileMap[i][j] == 'Z') {

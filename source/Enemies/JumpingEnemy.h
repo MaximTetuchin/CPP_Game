@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #ifndef JUMPING_ENEMY_H
 #define JUMPING_ENEMY_H
 #include "WalkingEnemy.h"

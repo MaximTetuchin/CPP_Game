@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #include "VerticalMovingPlatform.h"
 
 VerticalMovingPlatform::VerticalMovingPlatform(sf::Texture& image, float x, float y, float w, float h, float range, float spd)

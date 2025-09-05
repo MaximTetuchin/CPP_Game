@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #include "source/Constants.h"
 #include "source/Gameplay_objects/Tilemap.h"
 #include "source/Entity.h"

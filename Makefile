@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++17 -I./source -I./gtests
+CXXFLAGS = -Wall -Wextra -Wpedantic -std=c++17 -I./source -I./gtests
 LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 GTEST_LDFLAGS = -lgtest -pthread
 
@@ -19,7 +19,6 @@ TEST_SRC = \
     $(TEST_DIR)/test_gtest.cpp \
     $(TEST_DIR)/funcs.cpp
 
-# Исключаем main.cpp из исходников для тестов
 PROJECT_SRC_WITHOUT_MAIN = $(filter-out $(MAIN_SRC), $(PROJECT_SRC))
 PROJECT_OBJ_WITHOUT_MAIN = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(PROJECT_SRC_WITHOUT_MAIN))
 TEST_OBJ = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(TEST_SRC))
@@ -40,11 +39,9 @@ test: $(TEST_TARGET)
 		./$(TEST_TARGET); \
 	fi
 
-# Собираем тесты (используем объектные файлы проекта без main.o)
 $(TEST_TARGET): $(TEST_OBJ) $(PROJECT_OBJ_WITHOUT_MAIN)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(GTEST_LDFLAGS)
 
-# Общий шаблон для сборки объектов
 $(BUILD_DIR)/%.o: %.cpp | $(BUILD_DIR)
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@

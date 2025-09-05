@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #ifndef TILEMAP_H
 #define TILEMAP_H
 #include <SFML/Graphics.hpp>

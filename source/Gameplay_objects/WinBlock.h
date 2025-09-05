@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #ifndef WINBLOCK_H
 #define WINBLOCK_H
 #include "../Entity.h"

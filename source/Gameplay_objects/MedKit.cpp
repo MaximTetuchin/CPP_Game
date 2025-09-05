@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #include "MedKit.h"
 
 MedKit::MedKit(sf::Texture& image, float x, float y) 

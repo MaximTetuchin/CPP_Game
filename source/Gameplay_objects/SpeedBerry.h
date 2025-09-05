@@ -1,3 +1,6 @@
+/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
+        CPP Game
+*/
 #ifndef SPEED_BERRY_H
 #define SPEED_BERRY_H
 #include "../Entity.h"
