@@ -12,37 +12,40 @@ TEST_TARGET = $(BUILD_DIR)/test_runner
 
 MAIN_SRC = main.cpp
 PROJECT_SRC = $(wildcard $(SRC_DIR)/*.cpp $(SRC_DIR)/**/*.cpp)
-PROJECT_OBJ = $(patsubst $(SRC_DIR)/%.cpp, $(BUILD_DIR)/$(SRC_DIR)/%.o, $(PROJECT_SRC))
+PROJECT_OBJ = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(PROJECT_SRC))
 MAIN_OBJ = $(BUILD_DIR)/$(MAIN_SRC:.cpp=.o)
 
 TEST_SRC = \
     $(TEST_DIR)/test_gtest.cpp \
-    $(TEST_DIR)/simple_func.cpp
+    $(TEST_DIR)/funcs.cpp
 
-TEST_OBJ = $(patsubst $(TEST_DIR)/%.cpp, $(BUILD_DIR)/$(TEST_DIR)/%.o, $(TEST_SRC))
+# Исключаем main.cpp из исходников для тестов
+PROJECT_SRC_WITHOUT_MAIN = $(filter-out $(MAIN_SRC), $(PROJECT_SRC))
+PROJECT_OBJ_WITHOUT_MAIN = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(PROJECT_SRC_WITHOUT_MAIN))
+TEST_OBJ = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(TEST_SRC))
 
-.PHONY: all clean test prj
+.PHONY: all clean test
 
-prj: $(TARGET)
-test: $(TEST_TARGET)
-	@echo "Running tests..."
-	./$(TEST_TARGET)
+all: $(TARGET)
 
 $(TARGET): $(PROJECT_OBJ) $(MAIN_OBJ)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-$(TEST_TARGET): $(TEST_OBJ)
+test: $(TEST_TARGET)
+	@echo "Running tests..."
+	@if [ -z "$$DISPLAY" ]; then \
+		echo "No DISPLAY found, using xvfb-run..."; \
+		xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" ./$(TEST_TARGET); \
+	else \
+		./$(TEST_TARGET); \
+	fi
+
+# Собираем тесты (используем объектные файлы проекта без main.o)
+$(TEST_TARGET): $(TEST_OBJ) $(PROJECT_OBJ_WITHOUT_MAIN)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(GTEST_LDFLAGS)
 
+# Общий шаблон для сборки объектов
 $(BUILD_DIR)/%.o: %.cpp | $(BUILD_DIR)
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-$(BUILD_DIR)/$(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-$(BUILD_DIR)/$(TEST_DIR)/%.o: $(TEST_DIR)/%.cpp | $(BUILD_DIR)
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
