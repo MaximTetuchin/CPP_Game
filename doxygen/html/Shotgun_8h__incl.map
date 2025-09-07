@@ -1,0 +1,15 @@
+<map id="Shotgun.h" name="Shotgun.h">
+<area shape="rect" id="Node000001" title="Shotgun weapon class definition." alt="" coords="88,5,175,31"/>
+<area shape="rect" id="Node000002" href="$Weapon_8h.html" title="Weapon base class definition." alt="" coords="88,79,175,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,31,134,65,129,65,129,31"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,152,68,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="118,106,65,146,62,141,115,102"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="93,152,170,177"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="134,104,134,138,129,138,129,104"/>
+<area shape="rect" id="Node000005" href="$Entity_8h.html" title="Entity base class definition." alt="" coords="194,152,277,177"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="150,102,208,142,205,146,147,106"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="93,225,239,251"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="226,180,189,217,185,214,222,176"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="263,225,343,251"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="248,176,285,213,281,217,245,180"/>
+</map>

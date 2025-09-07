@@ -1,0 +1,34 @@
+
+
+PROJECT_NAME           = "CPP_GAME"
+PROJECT_BRIEF          = "2D game project on C++ with SFML"
+OUTPUT_DIRECTORY       = .               
+CREATE_SUBDIRS         = NO
+OPTIMIZE_OUTPUT_FOR_C  = NO
+OPTIMIZE_OUTPUT_FOR_CPLUSPLUS = YES
+
+
+INPUT                  = ../source
+FILE_PATTERNS          = *.h *.cpp
+RECURSIVE              = YES
+EXCLUDE                = ../gtests      
+
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+
+GENERATE_LATEX         = NO             
+GENERATE_MAN           = NO
+GENERATE_RTF           = NO
+GENERATE_XML           = NO
+
+FULL_PATH_NAMES        = NO
+STRIP_FROM_PATH        = ../source
+SORT_MEMBER_DOCS       = YES
+INLINE_SOURCES         = YES
+SOURCE_BROWSER         = YES
+VERBATIM_HEADERS       = YES

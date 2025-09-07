@@ -1,0 +1,35 @@
+<map id="Entity" name="Entity">
+<area shape="rect" id="Node000001" title="Implementation of the base Entity class." alt="" coords="5,228,65,253"/>
+<area shape="rect" id="Node000002" href="$classBullet.html" title="Implementation of the bullet projectile functionality." alt="" coords="171,5,231,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="37,214,44,175,57,128,79,81,94,59,112,40,140,24,170,17,171,22,142,29,115,44,98,63,84,84,62,130,49,176,42,215"/>
+<area shape="rect" id="Node000003" href="$classCoin.html" title="Implementation of the coin collectible functionality." alt="" coords="175,55,226,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="41,214,65,151,85,118,112,89,143,73,174,66,176,72,145,78,115,93,89,121,69,154,46,215"/>
+<area shape="rect" id="Node000004" href="$classEnemy.html" title="Implementation of the base enemy functionality." alt="" coords="167,104,234,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="47,214,74,175,91,155,112,138,139,125,166,118,168,123,141,130,115,143,95,159,78,178,52,217"/>
+<area shape="rect" id="Node000011" href="$classInvincibilitySphere.html" title="Implementation of the invincibility sphere functionality." alt="" coords="129,153,272,179"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="62,217,112,188,143,176,145,181,114,192,65,222"/>
+<area shape="rect" id="Node000012" href="$classMedKit.html" title="Implementation of the medical kit functionality." alt="" coords="167,203,235,228"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="78,231,166,218,167,223,79,237"/>
+<area shape="rect" id="Node000013" href="$classMovingPlatform.html" title="Implementation of the horizontal moving platform functionality." alt="" coords="137,252,264,277"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="79,244,138,253,137,258,78,250"/>
+<area shape="rect" id="Node000014" href="$classPlayer.html" title="Implementation of player character functionality." alt="" coords="169,301,232,327"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="67,259,114,286,170,305,168,310,112,291,64,264"/>
+<area shape="rect" id="Node000015" href="$classSpeedBerry.html" title="Implementation of the speed berry functionality." alt="" coords="152,351,249,376"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="52,264,78,301,95,320,115,336,153,353,151,357,112,340,92,324,74,305,48,267"/>
+<area shape="rect" id="Node000016" href="$classVerticalMovingPlatform.html" title="Implementation of the vertical moving platform functionality." alt="" coords="113,400,288,425"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="46,265,70,326,90,358,115,385,136,398,133,402,112,389,85,361,65,328,41,267"/>
+<area shape="rect" id="Node000017" href="$classWinBlock.html" title="Implementation of the win block functionality." alt="" coords="159,449,242,475"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="42,266,49,304,63,349,84,395,115,435,136,448,160,455,158,460,134,453,112,439,79,398,58,351,44,305,37,267"/>
+<area shape="rect" id="Node000005" href="$classFlyingEnemy.html" title="Implementation of the flying enemy functionality." alt="" coords="342,80,449,105"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="247,108,341,97,342,102,248,114"/>
+<area shape="rect" id="Node000007" href="$classWalkingEnemy.html" title="Implementation of the walking enemy functionality." alt="" coords="336,129,455,155"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="248,120,336,132,335,137,247,125"/>
+<area shape="rect" id="Node000006" href="$classArmoredFlyingEnemy.html" title="Implementation of the armored flying enemy functionality." alt="" coords="509,80,671,105"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="463,90,509,90,509,95,463,95"/>
+<area shape="rect" id="Node000008" href="$classArmoredWalkingEnemy.html" title="Implementation of the armored walking enemy functionality." alt="" coords="503,129,677,155"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="468,139,502,139,502,145,468,145"/>
+<area shape="rect" id="Node000009" href="$classJumpingEnemy.html" title="Implementation of the jumping enemy functionality." alt="" coords="530,179,650,204"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="460,155,539,176,538,181,459,161"/>
+<area shape="rect" id="Node000010" href="$classArmoredJumpingEnemy.html" title="Implementation of the armored jumping enemy functionality." alt="" coords="725,179,901,204"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="664,189,725,189,725,194,664,194"/>
+</map>

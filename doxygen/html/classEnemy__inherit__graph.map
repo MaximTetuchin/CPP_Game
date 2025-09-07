@@ -1,0 +1,17 @@
+<map id="Enemy" name="Enemy">
+<area shape="rect" id="Node000001" title="Implementation of the base enemy functionality." alt="" coords="149,79,216,104"/>
+<area shape="rect" id="Node000003" href="$classFlyingEnemy.html" title="Implementation of the flying enemy functionality." alt="" coords="61,152,168,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="164,116,128,154,124,150,160,112"/>
+<area shape="rect" id="Node000005" href="$classWalkingEnemy.html" title="Implementation of the walking enemy functionality." alt="" coords="221,152,339,177"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="211,110,266,150,263,154,208,114"/>
+<area shape="rect" id="Node000002" href="$classEntity.html" title="Implementation of the base Entity class." alt="" coords="153,5,213,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="185,44,185,79,180,79,180,44"/>
+<area shape="rect" id="Node000004" href="$classArmoredFlyingEnemy.html" title="Implementation of the armored flying enemy functionality." alt="" coords="5,225,168,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="107,191,94,226,89,224,103,189"/>
+<area shape="rect" id="Node000006" href="$classArmoredWalkingEnemy.html" title="Implementation of the armored walking enemy functionality." alt="" coords="193,225,367,251"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="283,191,283,225,277,225,277,191"/>
+<area shape="rect" id="Node000007" href="$classJumpingEnemy.html" title="Implementation of the jumping enemy functionality." alt="" coords="392,225,512,251"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="321,180,425,223,423,228,319,185"/>
+<area shape="rect" id="Node000008" href="$classArmoredJumpingEnemy.html" title="Implementation of the armored jumping enemy functionality." alt="" coords="364,299,540,324"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="455,264,455,299,449,299,449,264"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="Weapon" name="Weapon">
+<area shape="rect" id="Node000001" title="Abstract base class for all weapons in the game." alt="" coords="135,5,209,31"/>
+<area shape="rect" id="Node000002" href="$classMinigun.html" title="Implementation of the minigun weapon functionality." alt="" coords="5,79,80,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,40,65,81,63,76,138,35"/>
+<area shape="rect" id="Node000003" href="$classPistol.html" title="Implementation of the pistol weapon functionality." alt="" coords="104,79,163,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,44,142,80,137,77,157,42"/>
+<area shape="rect" id="Node000004" href="$classRifle.html" title="Implementation of the rifle weapon functionality." alt="" coords="187,79,237,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="188,42,208,77,203,80,183,44"/>
+<area shape="rect" id="Node000005" href="$classShotgun.html" title="Implementation of the shotgun weapon functionality." alt="" coords="261,79,336,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="206,35,279,76,277,81,203,40"/>
+</map>

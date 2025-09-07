@@ -1,0 +1,5 @@
+<map id="MedKit" name="MedKit">
+<area shape="rect" id="Node000001" title="Implementation of the medical kit functionality." alt="" coords="5,79,73,104"/>
+<area shape="rect" id="Node000002" href="$classEntity.html" title="Implementation of the base Entity class." alt="" coords="9,5,69,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="42,44,42,79,37,79,37,44"/>
+</map>

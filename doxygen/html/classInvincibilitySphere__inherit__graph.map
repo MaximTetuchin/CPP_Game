@@ -1,0 +1,5 @@
+<map id="InvincibilitySphere" name="InvincibilitySphere">
+<area shape="rect" id="Node000001" title="Implementation of the invincibility sphere functionality." alt="" coords="5,79,148,104"/>
+<area shape="rect" id="Node000002" href="$classEntity.html" title="Implementation of the base Entity class." alt="" coords="47,5,107,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="79,44,79,79,74,79,74,44"/>
+</map>

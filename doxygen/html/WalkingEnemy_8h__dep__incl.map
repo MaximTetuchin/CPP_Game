@@ -1,0 +1,17 @@
+<map id="WalkingEnemy.h" name="WalkingEnemy.h">
+<area shape="rect" id="Node000001" title="WalkingEnemy class definition." alt="" coords="258,5,387,31"/>
+<area shape="rect" id="Node000002" href="$ArmoredWalkingEnemy_8h.html" title="ArmoredWalkingEnemy class definition." alt="" coords="30,79,215,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="278,38,156,81,154,76,277,33"/>
+<area shape="rect" id="Node000004" href="$JumpingEnemy_8h.html" title="JumpingEnemy class definition." alt="" coords="257,79,388,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="325,44,325,79,320,79,320,44"/>
+<area shape="rect" id="Node000008" href="$WalkingEnemy_8cpp.html" title="WalkingEnemy class implementation." alt="" coords="412,79,556,104"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="362,34,459,76,457,81,360,39"/>
+<area shape="rect" id="Node000003" href="$ArmoredWalkingEnemy_8cpp.html" title="ArmoredWalkingEnemy class implementation." alt="" coords="5,152,205,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,118,111,153,106,151,114,117"/>
+<area shape="rect" id="Node000005" href="$ArmoredJumpingEnemy_8h.html" title="ArmoredJumpingEnemy class definition." alt="" coords="229,152,416,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="325,118,325,152,320,152,320,118"/>
+<area shape="rect" id="Node000007" href="$JumpingEnemy_8cpp.html" title="JumpingEnemy class implementation." alt="" coords="441,152,586,177"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="367,106,483,149,481,154,365,111"/>
+<area shape="rect" id="Node000006" href="$ArmoredJumpingEnemy_8cpp.html" title="ArmoredJumpingEnemy class implementation." alt="" coords="222,225,423,251"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="325,191,325,225,320,225,320,191"/>
+</map>

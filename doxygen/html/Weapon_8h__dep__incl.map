@@ -1,0 +1,23 @@
+<map id="Weapon.h" name="Weapon.h">
+<area shape="rect" id="Node000001" title="Weapon base class definition." alt="" coords="242,5,329,31"/>
+<area shape="rect" id="Node000002" href="$Minigun_8h.html" title="Minigun weapon class definition." alt="" coords="27,79,114,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="239,37,106,81,105,76,237,32"/>
+<area shape="rect" id="Node000004" href="$Pistol_8h.html" title="Pistol weapon class definition." alt="" coords="145,79,215,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="258,41,199,81,196,76,255,36"/>
+<area shape="rect" id="Node000006" href="$Player_8h.html" title="Player class definition." alt="" coords="248,79,323,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="288,44,288,79,283,79,283,44"/>
+<area shape="rect" id="Node000008" href="$Rifle_8h.html" title="Rifle weapon class definition." alt="" coords="354,79,417,104"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="314,36,371,76,367,81,311,41"/>
+<area shape="rect" id="Node000010" href="$Shotgun_8h.html" title="Shotgun weapon class definition." alt="" coords="453,79,539,104"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="333,32,463,76,461,81,331,37"/>
+<area shape="rect" id="Node000003" href="$Minigun_8cpp.html" title="Minigun weapon class implementation." alt="" coords="5,152,107,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="68,118,61,152,56,151,63,117"/>
+<area shape="rect" id="Node000005" href="$Pistol_8cpp.html" title="Pistol weapon class implementation." alt="" coords="131,152,216,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="180,118,177,152,172,152,175,118"/>
+<area shape="rect" id="Node000007" href="$Player_8cpp.html" title="Player class implementation." alt="" coords="241,152,330,177"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="288,118,288,152,283,152,283,118"/>
+<area shape="rect" id="Node000009" href="$Rifle_8cpp.html" title="Rifle weapon class implementation." alt="" coords="354,152,433,177"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="391,117,395,152,389,152,386,118"/>
+<area shape="rect" id="Node000011" href="$Shotgun_8cpp.html" title="Shotgun weapon class implementation." alt="" coords="457,152,559,177"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="503,117,509,151,503,152,498,118"/>
+</map>

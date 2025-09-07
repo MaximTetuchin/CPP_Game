@@ -1,0 +1,9 @@
+<map id="JumpingEnemy" name="JumpingEnemy">
+<area shape="rect" id="Node000001" title="Implementation of the jumping enemy functionality." alt="" coords="5,225,125,251"/>
+<area shape="rect" id="Node000002" href="$classWalkingEnemy.html" title="Implementation of the walking enemy functionality." alt="" coords="6,152,125,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="68,191,68,225,63,225,63,191"/>
+<area shape="rect" id="Node000003" href="$classEnemy.html" title="Implementation of the base enemy functionality." alt="" coords="32,79,99,104"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="68,118,68,152,63,152,63,118"/>
+<area shape="rect" id="Node000004" href="$classEntity.html" title="Implementation of the base Entity class." alt="" coords="35,5,95,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="68,44,68,79,63,79,63,44"/>
+</map>

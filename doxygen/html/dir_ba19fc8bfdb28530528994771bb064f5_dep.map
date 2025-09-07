@@ -1,0 +1,6 @@
+<map id="Enemies" name="Enemies">
+<area shape="rect" id="node1" href="dir_ba19fc8bfdb28530528994771bb064f5.html" title="Enemies" alt="" coords="37,5,116,31"/>
+<area shape="rect" id="node2" href="dir_843fc5ab7b5651a41ba3b04ab8f48bf6.html" title="Gameplay_objects" alt="" coords="5,79,148,104"/>
+<area shape="poly" id="edge1" href="dir_000000_000001.html" alt="" coords="79,31,79,65,74,65,74,31"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000000_000001.html" title="2" alt="" coords="80,53,90,68"/>
+</map>
