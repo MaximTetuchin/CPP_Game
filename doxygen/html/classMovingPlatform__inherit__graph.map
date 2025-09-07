@@ -1,0 +1,5 @@
+<map id="MovingPlatform" name="MovingPlatform">
+<area shape="rect" id="Node000001" title="Implementation of the horizontal moving platform functionality." alt="" coords="5,79,132,104"/>
+<area shape="rect" id="Node000002" href="$classEntity.html" title="Implementation of the base Entity class." alt="" coords="39,5,99,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,44,71,79,66,79,66,44"/>
+</map>

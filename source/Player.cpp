@@ -1,11 +1,21 @@
+/*!
+ * @file Player.cpp
+ * @brief Player class implementation
+ * @author Maxim Tetuchin <tetuhin@inbox.ru | st128993@student.spbu.ru>
+ * 
+ * @class Player
+ * @brief Implementation of player character functionality
+ */
 
-/* Maxim Tetuchin tetuhin@inbox.ru | st128993@student.spbu.ru
-        CPP Game
-*/
 #include "Player.h"
 #include "Gameplay_objects/Tilemap.h"
 #include "Constants.h" 
 
+/*!
+ * @brief Constructs a Player object with initial position and weapon
+ * @param image Texture for the player sprite
+ * @param startingWeapon Initial weapon for the player
+ */
 Player::Player(sf::Texture& image, Weapon* startingWeapon)
     : Entity(image, 7*32, 9*32, 40, 50),
       coins(0),
@@ -25,10 +35,21 @@ Player::Player(sf::Texture& image, Weapon* startingWeapon)
     sprite.setPosition(rect.left, rect.top);
 }
 
+/*!
+ * @brief Adds coins to the player's collection
+ * @param amount Number of coins to add
+ */
 void Player::addCoins(int amount) {
     coins += amount;
 }
 
+/*!
+ * @brief Applies damage to the player if not invincible
+ * @param damage Amount of damage to apply
+ * 
+ * If health reaches zero, the player respawns. After taking damage,
+ * the player becomes temporarily invincible.
+ */
 void Player::takeDamage(int damage) {
     if(!isInvincible) {
         health -= damage;
@@ -42,11 +63,22 @@ void Player::takeDamage(int damage) {
     }
 }
 
+/*!
+ * @brief Switches the player's current weapon
+ * @param newWeapon Weapon to switch to
+ */
 void Player::switchWeapon(Weapon* newWeapon) {
     currentWeapon = newWeapon;
 }
 
+/*!
+ * @brief Updates the player's state each frame
+ * @param time Time elapsed since last update in milliseconds
+ * 
+ * Handles movement, gravity, animation, and power-up timers.
+ */
 void Player::update(float time) {
+    // Update speed boost timer
     if(isSpeedBoosted) {
         speedBoostTime -= time;
         if(speedBoostTime <= 0) {
@@ -54,6 +86,8 @@ void Player::update(float time) {
             isSpeedBoosted = false;
         }
     }
+    
+    // Update invincibility timer
     if(isInvincible) {
         invincibilityTime -= time;
         if(invincibilityTime <= 0) {
@@ -61,20 +95,24 @@ void Player::update(float time) {
         }
     }
     
+    // Horizontal movement and collision
     rect.left += dx * time;
     Collision(0);
 
+    // Vertical movement with gravity
     if (!onGround) dy += 0.0005 * time;
     rect.top += dy * time;
     onGround = false;
     Collision(1);
 
+    // Animation frames
     currentFrame += 0.005 * time;
     idleFrame = currentFrame / 1.5;
 
     if (currentFrame > 6) currentFrame -= 6;
     if (idleFrame > 3) idleFrame -= 3;
 
+    // Set sprite texture based on movement direction
     if (dx > 0) {
         sprite.setTextureRect(sf::IntRect(40 * int(currentFrame), 244, 40, 50));
         lastAction = true;
@@ -84,6 +122,7 @@ void Player::update(float time) {
         lastAction = false;
     } 
     else {
+        // Idle animation
         if (lastAction) {
             sprite.setTextureRect(sf::IntRect(43 * int(idleFrame) + 4, 188, 40, 50));
         } else {
@@ -93,12 +132,20 @@ void Player::update(float time) {
 
     sprite.setPosition(rect.left, rect.top);
 
+    // Update weapon
     if (currentWeapon) {
         currentWeapon->update(time);
     }
     dx = 0;
 }
 
+/*!
+ * @brief Handles collision detection with tiles
+ * @param dir Direction of collision (0 = horizontal, 1 = vertical)
+ * 
+ * Checks collision with various tile types and adjusts player position accordingly.
+ * Special tile 'Z' triggers respawn with full health.
+ */
 void Player::Collision(int dir) {
     for (int i = rect.top / 32; i < (rect.top + rect.height) / 32; i++) {
         if (i < 0 || i >= H) continue;
@@ -128,6 +175,11 @@ void Player::Collision(int dir) {
     }
 }
 
+/*!
+ * @brief Respawns the player at the respawn point
+ * 
+ * Resets health, position, and status effects. Grants temporary invincibility after respawn.
+ */
 void Player::respawn() {
     health = maxHealth;
     rect.left = respawnX;
@@ -142,11 +194,21 @@ void Player::respawn() {
     invincibilityTime = 1500.0f;
 }
 
+/*!
+ * @brief Sets the player's respawn point
+ * @param x X coordinate of respawn point
+ * @param y Y coordinate of respawn point
+ */
 void Player::setRespawnPoint(float x, float y) {
     respawnX = x;
     respawnY = y;
 }
 
+/*!
+ * @brief Sets the player's position and handles collision after movement
+ * @param x X coordinate
+ * @param y Y coordinate
+ */
 void Player::setPosition(float x, float y) {
     rect.left = x;
     rect.top = y;
