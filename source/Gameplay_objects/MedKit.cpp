@@ -33,4 +33,4 @@ MedKit::MedKit(sf::Texture& image, float x, float y)
  * Collision detection with the player is handled externally in the main game loop.
  * This method is empty but maintained for interface consistency.
  */
-void MedKit::update(float time) {}
+void MedKit::update(float) {}

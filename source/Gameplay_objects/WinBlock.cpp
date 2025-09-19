@@ -33,4 +33,4 @@ WinBlock::WinBlock(sf::Texture& image, float x, float y)
  * Collision detection with the player is handled externally in the main game loop.
  * This method is empty but maintained for interface consistency.
  */
-void WinBlock::update(float time) {}
+void WinBlock::update(float) {}
