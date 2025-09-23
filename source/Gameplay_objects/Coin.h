@@ -33,7 +33,7 @@ public:
      * Currently handles basic entity updates. Collision detection
      * with the player is handled in the main game loop.
      */
-    void update(float time) override;
+    void update(float) override;
 };
 
 #endif
